@@ -57,20 +57,20 @@
             <!-- Team 1 Setup -->
             <div class="bg-slate-750/50 p-5 rounded-2xl border border-blue-500/20 bg-blue-950/10">
                 <div class="flex items-center gap-3 mb-3">
-                    <span class="text-3xl">🦅</span>
+                    <span class="text-3xl" id="team1-icon-preview">🎻</span>
                     <h3 class="text-lg font-bold text-blue-400">الفريق الأول</h3>
                 </div>
-                <input type="text" id="team1-name" value="فريق قيثارة الروح" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-blue-500 text-base font-semibold">
+                <input type="text" id="team1-name" value="فريق قيثارة الروح" oninput="updateTeamIcons()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-blue-500 text-base font-semibold">
                 <p class="text-xs text-slate-500 mt-2">مثال: سفراء المسيح، حماة الإيمان...</p>
             </div>
 
             <!-- Team 2 Setup -->
             <div class="bg-slate-750/50 p-5 rounded-2xl border border-red-500/20 bg-red-950/10">
                 <div class="flex items-center gap-3 mb-3">
-                    <span class="text-3xl">🦁</span>
+                    <span class="text-3xl" id="team2-icon-preview">🛡️</span>
                     <h3 class="text-lg font-bold text-red-400">الفريق الثاني</h3>
                 </div>
-                <input type="text" id="team2-name" value="سفراء المسيح" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-red-500 text-base font-semibold">
+                <input type="text" id="team2-name" value="سفراء المسيح" oninput="updateTeamIcons()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-red-500 text-base font-semibold">
                 <p class="text-xs text-slate-500 mt-2">مثال: جنود الكلمة، أبطال القيامة...</p>
             </div>
         </div>
@@ -120,7 +120,7 @@
         <div class="grid grid-cols-2 gap-4">
             <!-- Team 1 Score Card -->
             <div id="t1-card" class="bg-blue-950/20 border-2 border-blue-500/30 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden">
-                <div class="absolute top-2 right-2 text-xl">🦅</div>
+                <div class="absolute top-2 right-2 text-xl" id="t1-icon-display">🎻</div>
                 <h4 id="t1-display-name" class="font-bold text-blue-400 truncate text-sm sm:text-base">فريق 1</h4>
                 <div class="text-3xl sm:text-4xl font-black text-blue-100 mt-1" id="t1-score">0</div>
                 <div id="t1-turn-indicator" class="hidden text-xs text-blue-300 mt-2 font-bold bg-blue-500/20 py-1 px-2 rounded-full inline-block animate-pulse">🎯 دوركم الحالي</div>
@@ -128,7 +128,7 @@
 
             <!-- Team 2 Score Card -->
             <div id="t2-card" class="bg-red-950/20 border-2 border-red-500/30 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden">
-                <div class="absolute top-2 left-2 text-xl">🦁</div>
+                <div class="absolute top-2 left-2 text-xl" id="t2-icon-display">🛡️</div>
                 <h4 id="t2-display-name" class="font-bold text-red-400 truncate text-sm sm:text-base">فريق 2</h4>
                 <div class="text-3xl sm:text-4xl font-black text-red-100 mt-1" id="t2-score">0</div>
                 <div id="t2-turn-indicator" class="hidden text-xs text-red-300 mt-2 font-bold bg-red-500/20 py-1 px-2 rounded-full inline-block animate-pulse">🎯 دوركم الحالي</div>
@@ -169,7 +169,7 @@
     </div>
 
     <div id="winner-screen" class="hidden text-center space-y-6 py-6">
-        <div class="text-6xl sm:text-8xl bounce-active">👑</div>
+        <div id="winner-screen-crown" class="text-6xl sm:text-8xl bounce-active">👑</div>
         <h2 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500">
             تم تتويج البطل الحقيقي!
         </h2>
@@ -265,7 +265,7 @@
             { q: "من هما الشخصان اللذان أفرزهما الروح القدس للخدمة في الرحلة التبشيرية الأولى؟", options: ["برنابا وشاول", "بطرس ويوحنا", "بولس وسيلا", "بولس ولوقا"], correct: 0, ref: "أع 13: 2" },
             { q: "أين بدأت الرحلة التبشيرية الأولى ومن أي جزيرة أبحر برنابا وشاول؟", options: ["جزيرة قبرص", "جزيرة كريت", "جزيرة مالطة", "جزيرة صقلية"], correct: 0, ref: "أع 13: 4" },
             { q: "ما اسم الوالي الروماني الذكي في بافوس الذي آمن بعد رؤية معجزة ضرب الساحر بالعمى؟", options: ["سرجيوس بولس", "فيلكس الوالي", "فستوس الوالي", "غاليون الوالي"], correct: 0, ref: "أع 13: 7" },
-            { q: "من هو التلميذ الذي فارق بولس وبرنابا ورجع إلى أورشليم أثناء الرحلة الأولى؟", options: ["يوحنا الملقب مرقس", "لوقا الطبيب", "تيموثاوس الشاب", "تيطس"], correct: 0, ref: "أع 13: 13" },
+            { q: "من هو التلميذ الذي فارق بولس وبرنابا ورجع إلى أورشليم أثناء الرحلة الأولى？", options: ["يوحنا الملقب مرقس", "لوقا الطبيب", "تيموثاوس الشاب", "تيطس"], correct: 0, ref: "أع 13: 13" },
             { q: "في أي مدينة ظن الناس أن بولس وبرنابا إلهان (هرمس وزفس) لدرجة تقديم الذبائح لهما؟", options: ["لسترة", "أنطاكية بيسيدية", "أفسس", "تسالونيكي"], correct: 0, ref: "أع 14: 8-13" },
             { q: "ما هو القرار الرئيسي والمحوري الذي اتخذه مجمع أورشليم المسكوني الأول؟", options: ["عدم إلزام الأمم بالختان والناموس", "اختيار متياس بدلاً من يهوذا", "فرض الصيام الأربعيني", "جمع التبرعات لكنائس غلاطية"], correct: 0, ref: "أع 15" },
             { q: "من الذي رافق بولس في رحلته التبشيرية الثانية بعد الخلاف الحاد مع برنابا بخصوص مرقس؟", options: ["سيلا (سلوانس)", "برنابا", "يوحنا مرقس", "لوقا الإنجيلي"], correct: 0, ref: "أع 15: 40" },
@@ -282,7 +282,7 @@
             { q: "في أي مدينة أحدث صناع تماثيل ديانا الفضية بزعامة ديمتريوس شحناً وشغباً عظيماً ضد بولس؟", options: ["أفسس", "أثينا", "روما", "أنطاكية"], correct: 0, ref: "أع 19: 23-28" },
             { q: "ما اسم الشاب الذي غلب عليه النوم وسقط من الطبقة الثالثة ومات فأقامه بولس في ترواس؟", options: ["أفتيخوس", "تيموثاوس", "يوليوس قائد المئة", "كريسبس"], correct: 0, ref: "أع 20: 9" },
             { q: "من هو النبي الذي تنبأ بربط بولس وتسليمه للأمم مستخدماً منطقة (حزام) بولس في قيصرية؟", options: ["أغابوس", "سيلا", "يعقوب", "فيلبس الإنجيلي"], correct: 0, ref: "أع 21: 10-11" },
-            { q: "من هو الوالي الروماني في قيصرية الذي ترك بولس مقيداً سنتين إرضاء لليهود؟", options: ["فيلكس الوالي", "فستوس الوالي", "غاليون الوالي", "أغريباس الملك"], correct: 0, ref: "أع 24: 27" },
+            { q: "من هو الوالي الروماني في قيصرية الذي ترك بولس مقيداً سنتين إرضاء لليهود؟", options: ["فيلكس الوالي", "fstus", "غاليون الوالي", "أغريباس الملك"], correct: 0, ref: "أع 24: 27" },
             { q: "لمن رفع بولس الرسول دعواه القضائية لكي يحاكم رسمياً تفادياً لمؤامرات القتل؟", options: ["قيصر (إمبراطور روما)", "الملك هيرودس", "الوالي فستوس بمفرده", "رئيس مجمع أورشليم"], correct: 0, ref: "أع 25: 11" },
             { q: "من هو الملك الذي قال لبولس الرسول: 'بقليل تقنعني أن أصير مسيحياً'؟", options: ["أغريباس الثاني", "هيرودس الكبير", "فيلكس الوالي", "فستوس الوالي"], correct: 0, ref: "أع 26: 28" },
             { q: "ما اسم قائد المئة الروماني اللطيف من الكتيبة الأغسطسية الذي كلف بنقل بولس إلى روما؟", options: ["يوليوس", "كورنيليوس", "غاليون الوالي", "سرجيوس بولس"], correct: 0, ref: "أع 27: 1" },
@@ -301,6 +301,7 @@
     let originalTurn = 1; 
     let scores = { team1: 0, team2: 0 };
     let teamNames = { team1: "", team2: "" };
+    let teamEmojis = { team1: "🎻", team2: "🛡️" };
     let countdownTimer = null;
     let initialTime = 30; 
     let currentTimerValue = 30;
@@ -314,43 +315,80 @@
     let isBgmPlaying = false;
     let isBgmMutedByChoice = false;
 
+    // دالة ديناميكية تفاعلية ترجع الأيقونة المناسبة لاسم الفريق فور كتابته
+    function getEmojiForName(name) {
+        const text = name.trim();
+        if (!text) return "🎯";
+        
+        // كلمات مفتاحية لتحديد الأيقونة
+        if (text.includes("قيثارة") || text.includes("موسيق") || text.includes("لحن") || text.includes("ترنيم")) return "🎻";
+        if (text.includes("روح") || text.includes("حمام") || text.includes("سلام") || text.includes("نقي")) return "🕊️";
+        if (text.includes("سفراء") || text.includes("رسالة") || text.includes("عالم") || text.includes("أرض")) return "🌐";
+        if (text.includes("جنود") || text.includes("جيش") || text.includes("سيف") || text.includes("حرب")) return "⚔️";
+        if (text.includes("أبطال") || text.includes("درع") || text.includes("إيمان") || text.includes("حماة")) return "🛡️";
+        if (text.includes("ملك") || text.includes("تاج") || text.includes("مسيح") || text.includes("سماوي") || text.includes("ذهبي")) return "👑";
+        if (text.includes("صقر") || text.includes("نسر") || text.includes("طائر")) return "🦅";
+        if (text.includes("أسد") || text.includes("قوي") || text.includes("شجاع") || text.includes("غالب")) return "🦁";
+        if (text.includes("نجم") || text.includes("ضياء") || text.includes("نور") || text.includes("شمس")) return "⭐";
+        if (text.includes("سفينة") || text.includes("فلك") || text.includes("مركب")) return "⛵";
+        if (text.includes("صليب") || text.includes("فداء") || text.includes("كنيسة")) return "✝️";
+        
+        return "🔥"; // إيموجي تنافسي شبابي كافتراضي
+    }
+
+    function updateTeamIcons() {
+        const name1 = document.getElementById('team1-name').value.trim();
+        const name2 = document.getElementById('team2-name').value.trim();
+        
+        teamEmojis.team1 = getEmojiForName(name1);
+        teamEmojis.team2 = getEmojiForName(name2);
+        
+        document.getElementById('team1-icon-preview').innerText = teamEmojis.team1;
+        document.getElementById('team2-icon-preview').innerText = teamEmojis.team2;
+    }
+
     function initAudio() {
         try {
             Tone.start();
             
-            // 1. سينثسيزر المؤثرات الصوتية (إجابة صحيحة، خاطئة، إلخ)
+            // 1. سينثسيزر المؤثرات الصوتية للأجوبة
             synth = new Tone.Synth().toDestination();
-            synth.volume.value = -6; // حجم صوت مناسب للمؤثرات
+            synth.volume.value = -4;
 
-            // 2. سينثسيزر الموسيقى الخلفية (صوت قيثارة دافئ ونقي للغاية)
-            bgmSynth = new Tone.Synth({
-                oscillator: { type: "sine" }, // نغمة جيبية نقية لتعطي طابع قيثارة/هارب مهدئ وهادئ
+            // 2. سينثسيزر الموسيقى الخلفية المطور (موجة شبابية حماسية ومبهجة تشبه ألعاب الفيديو)
+            bgmSynth = new Tone.MonoSynth({
+                oscillator: { type: "triangle" }, // نغمة واضحة تذكرنا بألعاب المغامرة اللطيفة
                 envelope: {
-                    attack: 0.15,
-                    decay: 0.8,
-                    sustain: 0.15,
-                    release: 1.2
+                    attack: 0.02,
+                    decay: 0.15,
+                    sustain: 0.6,
+                    release: 0.3
+                },
+                filterEnvelope: {
+                    attack: 0.01,
+                    decay: 0.2,
+                    sustain: 0.4,
+                    baseFrequency: 450,
+                    octaves: 1.8
                 }
             }).toDestination();
-            bgmSynth.volume.value = -25; // مستوى صوت خلفي خافت جداً وهادئ لعدم التشتيت (-25 ديسيبل)
+            bgmSynth.volume.value = -22; // درجة هادئة للموسيقى الخلفية حتى لا تشوش على اللعب
 
-            // نغمات القيثارة المتصاعدة المشوقة (A Minor / C Major) التي تشعل المنافسة بهدوء
-            const harpArpeggio = [
-                "A2", "E3", "A3", "C4",
-                "A2", "E3", "A3", "B3",
-                "F2", "C3", "F3", "A3",
-                "D2", "A2", "D3", "F3",
-                "C3", "G3", "C4", "E4",
-                "E2", "B2", "E3", "G3"
+            // لحن شبابي نشط ومميز على نغمات متسارعة (BPM 128) يعطي إيقاع رائع للمنافسة الكنسية
+            const upbeatAdventureMelody = [
+                "A3", "E4", "A4", "C5", "E4", "A4", "B4", "E4",
+                "F3", "C4", "F4", "A4", "C4", "F4", "G4", "C4",
+                "C3", "G3", "C4", "E4", "G3", "C4", "D4", "G3",
+                "G3", "D4", "G4", "B4", "D4", "G4", "A4", "D4"
             ];
             
             let noteIdx = 0;
             bgmLoop = new Tone.Loop(time => {
                 if (isBgmPlaying && !isBgmMutedByChoice) {
-                    bgmSynth.triggerAttackRelease(harpArpeggio[noteIdx], "4n", time);
-                    noteIdx = (noteIdx + 1) % harpArpeggio.length;
+                    bgmSynth.triggerAttackRelease(upbeatAdventureMelody[noteIdx], "8n", time);
+                    noteIdx = (noteIdx + 1) % upbeatAdventureMelody.length;
                 }
-            }, "4n"); // عزف نغمة هادئة كل ربع نبضة
+            }, "8n"); // العزف بنبضات سريعة ومبهجة
 
             isMuted = false;
             document.getElementById('audio-banner').classList.add('hidden');
@@ -359,7 +397,7 @@
             playChimeSound('up');
             startBgm();
         } catch (e) {
-            console.warn("Audio Context delay setup", e);
+            console.warn("Audio Context setup delay", e);
         }
     }
 
@@ -416,10 +454,13 @@
 
     function startGame() {
         playChimeSound('click');
-        startBgm(); // تشغيل الموسيقى عند بدء اللعب مباشرة
+        startBgm();
         
         teamNames.team1 = document.getElementById('team1-name').value.trim() || "فريق قيثارة الروح";
         teamNames.team2 = document.getElementById('team2-name').value.trim() || "سفراء المسيح";
+        
+        // جلب الأيقونات التفاعلية المحدثة
+        updateTeamIcons();
         
         const selectedScope = document.getElementById('epistle-select').value;
         const selectedCount = document.getElementById('q-count-select').value;
@@ -427,7 +468,6 @@
         
         let sourcePool = [];
         if (selectedScope === 'part1') {
-            // القسم الأول: يحتوي على الـ 30 سؤالاً الأولى (الـ 24 الخاصة ببطرس وبولس + 6 أسئلة مكملة)
             sourcePool = [...questionsDatabase.part1];
         } else if (selectedScope === 'part2') {
             sourcePool = [...questionsDatabase.part2];
@@ -435,11 +475,9 @@
             sourcePool = [...questionsDatabase.part3];
         }
 
-        // تحديد الحجم المقتطع (10، 20، أو 30 سؤالاً)
         const finalCount = parseInt(selectedCount, 10);
         gameQuestions = sourcePool.slice(0, Math.min(finalCount, sourcePool.length));
 
-        // تصفير النقاط والعدّادات والقرعة العشوائية للفريق البادئ
         scores.team1 = 0;
         scores.team2 = 0;
         currentQuestionIndex = 0;
@@ -449,9 +487,12 @@
 
         document.getElementById('t1-display-name').innerText = teamNames.team1;
         document.getElementById('t2-display-name').innerText = teamNames.team2;
+        
+        document.getElementById('t1-icon-display').innerText = teamEmojis.team1;
+        document.getElementById('t2-icon-display').innerText = teamEmojis.team2;
+        
         updateScoresUI();
 
-        // التبديل الحركي للشاشات
         document.getElementById('setup-screen').classList.add('hidden');
         document.getElementById('play-screen').classList.remove('hidden');
 
@@ -473,7 +514,6 @@
         document.getElementById('progress-text').innerText = `${currentQuestionIndex + 1}/${gameQuestions.length}`;
         document.getElementById('question-text').innerText = currentQuestion.q;
         
-        // عرض اسم القسم الدقيق في ترويسة السؤال
         const selectedScope = document.getElementById('epistle-select').value;
         if (selectedScope === 'part1') {
             document.getElementById('question-source').innerText = "القسم الأول: القديسان بطرس وبولس 📜";
@@ -756,25 +796,30 @@
         let winnerName = "";
         let winnerPoints = 0;
         let loserPoints = 0;
+        let winnerEmoji = "👑";
 
         if (scores.team1 > scores.team2) {
-            winnerName = `🏆 ${teamNames.team1} 🏆`;
+            winnerName = `${teamNames.team1}`;
+            winnerEmoji = teamEmojis.team1;
             winnerPoints = scores.team1;
             loserPoints = scores.team2;
             document.getElementById('winner-team-name').className = "text-2xl font-black text-blue-400";
         } else if (scores.team2 > scores.team1) {
-            winnerName = `🏆 ${teamNames.team2} 🏆`;
+            winnerName = `${teamNames.team2}`;
+            winnerEmoji = teamEmojis.team2;
             winnerPoints = scores.team2;
             loserPoints = scores.team1;
             document.getElementById('winner-team-name').className = "text-2xl font-black text-red-400";
         } else {
-            winnerName = "🤝 تعادل مشرف لكلا الفريقين! 🤝";
+            winnerName = "تعادل مشرف لكلا الفريقين!";
+            winnerEmoji = "🤝";
             winnerPoints = scores.team1;
             loserPoints = scores.team2;
             document.getElementById('winner-team-name').className = "text-2xl font-black text-amber-400";
         }
 
-        document.getElementById('winner-team-name').innerText = winnerName;
+        document.getElementById('winner-screen-crown').innerText = winnerEmoji;
+        document.getElementById('winner-team-name').innerText = `🏆 ${winnerName} 🏆`;
         document.getElementById('winner-points').innerText = `${winnerPoints} نقطة`;
         document.getElementById('loser-points').innerText = `${loserPoints} نقطة`;
 
@@ -787,6 +832,11 @@
         document.getElementById('winner-screen').classList.add('hidden');
         document.getElementById('setup-screen').classList.remove('hidden');
     }
+    
+    // فحص دوري عند التحميل لمطابقة المدخلات الافتراضية مع الأيقونات المناسبة
+    window.addEventListener('load', () => {
+        updateTeamIcons();
+    });
 </script>
 </body>
 </html>
