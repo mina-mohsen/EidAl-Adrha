@@ -3,320 +3,717 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مسابقة رسالة كورنثوس الثانية الشاملة</title>
+    <title>مسابقة عبد الرسل التنافسية - الأقسام الثلاثة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --accent: #d35400;
-            --success: #27ae60;
-            --danger: #c0392b;
-            --light: #f4f7f6;
-            --white: #ffffff;
-            --skipped: #f39c12;
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+        * {
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
-
-        body { 
-            background-color: #bdc3c7; 
-            margin: 0; 
-            padding: 10px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start;
-            min-height: 100vh;
+        .bounce-active {
+            animation: bounce 1s infinite;
         }
-
-        .container { 
-            width: 100%; 
-            max-width: 600px; 
-            background: var(--white); 
-            padding: 15px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-5px); }
+            50% { transform: translateY(5px); }
         }
-        
-        header { text-align: center; border-bottom: 2px solid var(--light); padding-bottom: 10px; margin-bottom: 15px; position: sticky; top: 0; background: var(--white); z-index: 10; }
-        h1 { font-size: 1.2rem; margin: 10px 0; color: var(--primary); }
-
-        #timer-box { background: #fdedec; color: var(--danger); padding: 5px 15px; border-radius: 50px; font-weight: 800; font-size: 1.1rem; display: inline-block; border: 2px solid var(--danger); }
-        
-        .screen { display: none; flex-direction: column; gap: 15px; }
-        .active-screen { display: flex; }
-
-        label { font-size: 0.9rem; font-weight: bold; color: var(--primary); margin-bottom: -10px; margin-right: 5px; }
-        input { padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-size: 1rem; width: 100%; }
-
-        .btn-main { background: var(--primary); color: white; padding: 14px; border: none; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: transform 0.1s; }
-        .btn-main:active { transform: scale(0.97); }
-
-        .option-item { background: #f8f9f9; padding: 14px; border-radius: 12px; cursor: pointer; border: 2px solid #ebedef; margin-bottom: 8px; text-align: right; }
-        .option-item.selected { background: #ebf5fb; border-color: var(--primary); font-weight: bold; }
-
-        .nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(35px, 1fr)); gap: 6px; margin-top: 20px; padding-top: 15px; border-top: 2px solid #eee; }
-        .nav-dot { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #eee; border-radius: 8px; font-size: 0.8rem; cursor: pointer; }
-        .nav-dot.current { background: var(--primary); color: white; border: 2px solid #34495e; }
-        .nav-dot.answered { background: var(--success); color: white; }
-
-        .review-card { padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #eee; font-size: 0.9rem; text-align: right; }
-        .review-card.correct-card { border-right: 5px solid var(--success); background: #f0f9f4; }
-        .review-card.wrong-card { border-right: 5px solid var(--danger); background: #fdf2f2; }
-
-        .block-message { text-align: center; color: var(--danger); font-weight: bold; padding: 20px; }
-        #status-msg { font-size: 1rem; margin-top: 15px; text-align: center; padding: 10px; border-radius: 10px; }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+        }
     </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-3 sm:p-6 overflow-x-hidden">
 
-<div class="container">
-    <header>
-        <h1>مسابقة رسالة كورنثوس الثانية (50 سؤال)</h1>
-        <div id="timer-box" style="display:none;">25:00</div>
+<canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full hidden"></canvas>
+
+<div class="w-full max-w-4xl bg-slate-800/90 border border-slate-700 rounded-3xl shadow-2xl p-4 sm:p-8 backdrop-blur-md relative overflow-hidden">
+    
+    <!-- Header -->
+    <header class="text-center mb-6 border-b border-slate-700/50 pb-4 relative">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 tracking-wide">
+            🏆 مسابقة عَبْد الرُّسُل التنافسية 🏆
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base mt-2">منافسة تفاعلية حماسية مقسمة لثلاثة أقسام ذهبية في كرازة وحياة الآباء الرسل</p>
     </header>
 
-    <!-- Blocked Screen -->
-    <div id="block-screen" class="screen">
-        <div class="block-message">
-            <h2>عذراً!</h2>
-            <p>لقد شاركت بالفعل في هذه المسابقة. يُسمح بمحاولة واحدة فقط لكل مستخدم.</p>
-            <button class="btn-main" style="margin-top:20px" onclick="switchScreen('reg-screen')">العودة (للمسؤول فقط)</button>
+    <div id="audio-banner" class="mb-4 bg-amber-500/10 border border-amber-500/30 p-3 rounded-xl flex justify-between items-center text-xs sm:text-sm text-amber-300">
+        <span>🔊 يرجى تفعيل الصوت للحصول على تجربة حماسية ومؤثرات صوتية مميزة أثناء اللعب!</span>
+        <button onclick="initAudio()" class="bg-amber-500 text-slate-950 px-3 py-1.5 rounded-lg font-bold hover:bg-amber-400 transition">تفعيل الصوت</button>
+    </div>
+
+    <div id="setup-screen" class="space-y-6">
+        <h2 class="text-xl font-bold text-slate-200 border-r-4 border-amber-500 pr-3">مرحلة تقسيم الفرق وتجهيز المسابقة</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Team 1 Setup -->
+            <div class="bg-slate-750/50 p-5 rounded-2xl border border-blue-500/20 bg-blue-950/10">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="text-3xl">🦅</span>
+                    <h3 class="text-lg font-bold text-blue-400">الفريق الأول</h3>
+                </div>
+                <input type="text" id="team1-name" value="فريق قيثارة الروح" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-blue-500 text-base font-semibold">
+                <p class="text-xs text-slate-500 mt-2">مثال: سفراء المسيح، حماة الإيمان...</p>
+            </div>
+
+            <!-- Team 2 Setup -->
+            <div class="bg-slate-750/50 p-5 rounded-2xl border border-red-500/20 bg-red-950/10">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="text-3xl">🦁</span>
+                    <h3 class="text-lg font-bold text-red-400">الفريق الثاني</h3>
+                </div>
+                <input type="text" id="team2-name" value="فريق أسود الإنجيل" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-red-500 text-base font-semibold">
+                <p class="text-xs text-slate-500 mt-2">مثال: جنود الكلمة، أبطال القيامة...</p>
+            </div>
+        </div>
+
+        <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-700/80 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Part selection -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-300 mb-2">اختر القسم للتحدي:</label>
+                <select id="epistle-select" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-amber-500 font-medium text-sm">
+                    <option value="part1">القسم الأول: بطرس وبولس (30 سؤالاً)</option>
+                    <option value="part2">القسم الثاني: أعمال الرسل (أع 1-12) (30 سؤالاً)</option>
+                    <option value="part3">القسم الثالث: أعمال الرسل (أع 13-28) (30 سؤالاً)</option>
+                </select>
+            </div>
+
+            <!-- Questions count selection -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-300 mb-2">عدد أسئلة هذه الجولة:</label>
+                <select id="q-count-select" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-amber-500 font-medium">
+                    <option value="10">10 أسئلة (تحدي سريع)</option>
+                    <option value="20">20 سؤالاً (متوسط)</option>
+                    <option value="30" selected>30 سؤالاً (كامل القسم)</option>
+                </select>
+            </div>
+
+            <!-- Timer selection -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-300 mb-2">زمن الإجابة للسؤال:</label>
+                <select id="timer-select" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-amber-500 font-medium">
+                    <option value="15">15 ثانية (حماسي جداً)</option>
+                    <option value="30" selected>30 ثانية (مناسب)</option>
+                    <option value="45">45 ثانية (هادئ)</option>
+                    <option value="0">بدون وقت محدد</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Start Button -->
+        <button onclick="startGame()" class="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black text-xl py-5 rounded-2xl shadow-xl transition-all hover:scale-[1.01] active:scale-[0.99] flex justify-center items-center gap-3">
+            ⚔️ ابدأ منافسة القسم المختار فوراً ⚔️
+        </button>
+    </div>
+
+    <div id="play-screen" class="hidden space-y-6">
+        
+        <!-- Scoreboard Panel -->
+        <div class="grid grid-cols-2 gap-4">
+            <!-- Team 1 Score Card -->
+            <div id="t1-card" class="bg-blue-950/20 border-2 border-blue-500/30 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden">
+                <div class="absolute top-2 right-2 text-xl">🦅</div>
+                <h4 id="t1-display-name" class="font-bold text-blue-400 truncate text-sm sm:text-base">فريق 1</h4>
+                <div class="text-3xl sm:text-4xl font-black text-blue-100 mt-1" id="t1-score">0</div>
+                <div id="t1-turn-indicator" class="hidden text-xs text-blue-300 mt-2 font-bold bg-blue-500/20 py-1 px-2 rounded-full inline-block animate-pulse">🎯 دوركم الحالي</div>
+            </div>
+
+            <!-- Team 2 Score Card -->
+            <div id="t2-card" class="bg-red-950/20 border-2 border-red-500/30 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden">
+                <div class="absolute top-2 left-2 text-xl">🦁</div>
+                <h4 id="t2-display-name" class="font-bold text-red-400 truncate text-sm sm:text-base">فريق 2</h4>
+                <div class="text-3xl sm:text-4xl font-black text-red-100 mt-1" id="t2-score">0</div>
+                <div id="t2-turn-indicator" class="hidden text-xs text-red-300 mt-2 font-bold bg-red-500/20 py-1 px-2 rounded-full inline-block animate-pulse">🎯 دوركم الحالي</div>
+            </div>
+        </div>
+
+        <!-- Current Status and Progress -->
+        <div class="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl text-xs sm:text-sm border border-slate-700/60">
+            <span class="text-slate-400 font-medium">سؤال رقم: <strong id="progress-text" class="text-amber-400">1/30</strong></span>
+            <span id="turn-announcement" class="text-amber-300 font-bold animate-pulse">جاري البدء...</span>
+            <span id="q-timer" class="text-red-400 font-black text-lg bg-red-500/10 px-3 py-1 rounded-lg border border-red-500/20">30</span>
+        </div>
+
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 p-6 rounded-2xl shadow-inner min-h-[140px] flex flex-col justify-center relative">
+            <span id="question-source" class="absolute top-3 right-4 bg-slate-700 text-slate-300 px-3 py-1 rounded-full text-xs font-semibold">القسم الأول</span>
+            <p id="question-text" class="text-lg sm:text-xl font-bold text-slate-100 text-center leading-relaxed mt-4">جاري تحميل السؤال التنافسي...</p>
+        </div>
+
+        <div id="options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Dynamic Buttons will be inserted here -->
+        </div>
+
+        <!-- Action Area -->
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+            <button id="steal-btn" onclick="triggerSteal()" class="hidden w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 px-4 rounded-xl shadow transition duration-250 flex items-center justify-center gap-2">
+                ⚡ سرقة السؤال للمنافس (تحدي!)
+            </button>
+            <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl shadow transition duration-250 flex items-center justify-center gap-2">
+                التالي ⬅️
+            </button>
+        </div>
+
+        <!-- Feedback Alert Overlay -->
+        <div id="feedback-panel" class="hidden p-4 rounded-xl text-center font-bold text-sm sm:text-base border transition duration-300">
+            <p id="feedback-msg"></p>
+            <p id="ref-msg" class="text-xs font-normal mt-1 opacity-90"></p>
         </div>
     </div>
 
-    <!-- Registration -->
-    <div id="reg-screen" class="active-screen screen">
-        <div style="text-align: center;"><img src="https://imgur.com/hH7HWvE.jpeg" style="width: 100px; height: 100px; border-radius: 50%;" alt="logo"></div>
-        <input type="text" id="u-name" placeholder="الاسم بالكامل">
-        <input type="tel" id="u-phone" placeholder="رقم الموبايل">
-        <input type="text" id="u-address" placeholder="العنوان أو الكنيسة">
-        <label for="u-birthdate">تاريخ الميلاد:</label>
-        <input type="date" id="u-birthdate">
-        <button class="btn-main" onclick="startQuiz()">بدء الاختبار</button>
+    <div id="winner-screen" class="hidden text-center space-y-6 py-6">
+        <div class="text-6xl sm:text-8xl bounce-active">👑</div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500">
+            تم تتويج البطل الحقيقي!
+        </h2>
+        <div class="p-6 bg-slate-900/80 border border-slate-700 rounded-3xl max-w-md mx-auto space-y-4">
+            <h3 id="winner-team-name" class="text-2xl font-black text-amber-400">اسم الفريق الفائز</h3>
+            <p class="text-slate-300">حصل على اللقب الذهبي "عَبْد الرُّسُل" بعد انتهاء تحدي هذا القسم بمنافسة كنسية ملحمية وشريفة!</p>
+            <div class="grid grid-cols-2 gap-4 border-t border-slate-800 pt-4">
+                <div>
+                    <span class="block text-xs text-slate-400">نقاط الفائز</span>
+                    <strong id="winner-points" class="text-2xl font-black text-emerald-400">0</strong>
+                </div>
+                <div>
+                    <span class="block text-xs text-slate-400">نقاط الخاسر</span>
+                    <strong id="loser-points" class="text-2xl font-black text-red-400">0</strong>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="restartGame()" class="bg-gradient-to-r from-blue-500 to-teal-600 hover:from-blue-400 hover:to-teal-500 text-white font-bold text-lg py-4 px-10 rounded-2xl shadow-xl transition hover:scale-105 active:scale-95">
+            🔄 اختر قسماً آخر وجولة جديدة
+        </button>
     </div>
 
-    <!-- Questions -->
-    <div id="quiz-screen" class="screen">
-        <div id="q-wrapper"></div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="btn-main" style="background:#95a5a6;" onclick="nav(-1)">السابق</button>
-            <button class="btn-main" onclick="nav(1)">التالي</button>
-        </div>
-        <button id="finish-btn" class="btn-main" style="background:var(--success); display: none; margin-top: 5px;" onclick="finishQuiz()">إنهاء وحفظ النتيجة</button>
-        <div class="nav-grid" id="nav-grid"></div>
-    </div>
-
-    <!-- Results -->
-    <div id="finish-screen" class="screen">
-        <div style="text-align:center;">
-            <h2 style="color: var(--success);">تمت عملية الإرسال!</h2>
-            <div id="status-msg">جاري التأكيد...</div>
-            <div id="final-score" style="font-size: 3rem; font-weight: bold; color: var(--primary); margin: 15px 0;">0/50</div>
-            <p style="color: #7f8c8d;">تم تسجيل إجاباتك بنجاح في قاعدة البيانات (الإكسيل).</p>
-            
-            <button class="btn-main" style="background:#3498db; width: 100%; margin-top: 15px;" onclick="toggleReview()">مراجعة الإجابات</button>
-        </div>
-        <div id="review-list" style="display:none; margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px;"></div>
-    </div>
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGvzORDW-DEuH9RSH3Mpk05xalEzOAeGraC8wo0jjPcdJX02TFy1Z04x8Kkf5qv89dIw/exec";
+    const questionsDatabase = {
+        // القسم الأول: بطرس وبولس (30 سؤالاً - الـ 24 الأولى مرتبة بدقة حسب الطلب)
+        part1: [
+            { q: "من أي سبط كان بولس الرسول؟", options: ["بنيامين", "يهوذا", "لاوي", "رأوبين"], correct: 0, ref: "في 3:5" },
+            { q: "ما معنى اسم بولس الرسول؟", options: ["الحازم", "الضعيف", "الصغير", "الممجد"], correct: 2, ref: "قاموس الكتاب" },
+            { q: "في أي مدينة رُجم بولس الرسول حتى ظنوا أنه مات؟", options: ["مالطة", "أفسس", "أنطاكية", "لسترة"], correct: 3, ref: "أع 14:19" },
+            { q: "من هو الوالي الذي ارتعب عندما تحدث بولس الرسول عن الدينونة؟", options: ["فستوس", "فيلكس", "أغريباس", "غاليون"], correct: 1, ref: "أع 24:25" },
+            { q: "من الذي لم يوافق بولس الرسول على ختانه؟", options: ["تيموثاوس", "تيطس", "مرقس", "لوقا"], correct: 1, ref: "غل 2:3" },
+            { q: "أين مُنع بولس الرسول من الكرازة أولاً بالروح القدس؟", options: ["آسيا", "مقدونية", "روما", "أورشليم"], correct: 0, ref: "أع 16:6" },
+            { q: "كم مرة ذكر سفر الأعمال قصة اهتداء بولس الرسول؟", options: ["مرة واحدة", "مرتين", "ثلاث مرات", "أربع مرات"], correct: 2, ref: "أع 9، 22، 26" },
+            { q: "ما هي المدينة التي صنع فيها بولس الرسول الخيام مع أكيلا وبريسكلا؟", options: ["تسالونيكي", "لسترة", "أفسس", "كورنثوس"], correct: 3, ref: "أع 18:3" },
+            { q: "كم مرة انكسرت السفينة ببولس الرسول؟", options: ["مرة واحدة", "مرتين", "ثلاث مرات", "أربع مرات"], correct: 2, ref: "2 كو 11:25" },
+            { q: "ما اسم الساحر الذي وبخه بولس وأصابه بالعمى؟", options: ["سيمون", "يمبريس", "ينيس", "باريشوع (عليم الساحر)"], correct: 3, ref: "أع 13:6" },
+            { q: "من هو الوالي الذي حاكم بولس في كورنثوس؟", options: ["غاليون", "فيلكس", "فستوس", "سرجيوس بولس"], correct: 0, ref: "أع 18:12" },
+            { q: "أين كتب بولس الرسول: أكملت السعي، حفظت الإيمان؟", options: ["الرسالة الأولى إلى كورنثوس", "الرسالة الثانية إلى تيموثاوس", "الرسالة إلى كولوسي", "الرسالة إلى العبرانيين"], correct: 1, ref: "2 تيم 4:7" },
+            { q: "أين ولد بطرس الرسول؟", options: ["بيت صيدا", "أورشليم", "الجليل", "كفرناحوم"], correct: 0, ref: "يو 1:44" },
+            { q: "في أي سنة استشهد القديس بطرس الرسول؟", options: ["67 م", "64 م", "63 م", "68 م"], correct: 0, ref: "تاريخ الكنيسة" },
+            { q: "ماذا أُطلق على بطرس وأندراوس؟", options: ["ابني زبدي", "ابني يونا", "ابني رعد", "ولا إجابة مما سبق"], correct: 1, ref: "مت 16:17" },
+            { q: "أي من الأماكن المذكورة لم يبشر فيها القديس بطرس الرسول؟", options: ["أنطاكية", "بنتس", "بلاد فارس", "فلسطين"], correct: 2, ref: "السنكسار والتقليد" },
+            { q: "في كم إنجيل ذُكرت قصة مشي بطرس على المياه؟", options: ["إنجيل واحد (متى فقط)", "إنجيلان", "ثلاثة أناجيل", "الأربعة أناجيل"], correct: 0, ref: "مت 14:28" },
+            { q: "كتب بطرس الرسول رسائله للمتغربين في.....؟", options: ["رومية", "مقدونية", "قيصرية", "آسيا الصغرى"], correct: 3, ref: "1 بط 1:1" },
+            { q: "قال المسيح: 'أنت بطرس وعلى هذه الصخرة أبني كنيستي'.. رداً على قول بطرس:", options: ["ها نحن قد تركنا كل شيء وتبعناك", "أنت هو المسيح ابن الله الحي", "ولو اضطررت أن أموت معك لا أنكرك", "يارب أنت تعلم أني أحبك"], correct: 1, ref: "مت 16:16" },
+            { q: "كم مرة ذُكرت حماة بطرس في الأناجيل الأربعة؟", options: ["مرة واحدة", "مرتان", "3 مرات (متى ومرقس ولوقا)", "4 مرات"], correct: 2, ref: "مت 8، مر 1، لو 4" },
+            { q: "كم عدد أصحاحات رسالة بطرس الأولى؟ والثانية؟", options: ["6 و2", "4 و3", "5 أصحاحات للأولى و3 للثانية", "1 و4"], correct: 2, ref: "العهد الجديد" },
+            { q: "قاد بطرس مجموعة مكونة من ....... لاختيار من يحل مكان يهوذا الإسخريوطي.", options: ["نحو 120 نفساً", "160 نفساً", "100 نفس", "70 نفساً"], correct: 0, ref: "أع 1:15" },
+            { q: "كتبت رسالة بطرس الأولى بيد الأخ الأمين....", options: ["أرخبس", "أرتيماس", "سلوانس", "أبلوس"], correct: 2, ref: "1 بط 5:12" },
+            { q: "في أي مدينة رأى بطرس رؤيا الملاءة النازلة من السماء؟", options: ["أورشليم", "يافا", "أنطاكية", "دمشق"], correct: 1, ref: "أع 10:5" },
+            // تكميل الـ 30 سؤالاً للقسم الأول بأسئلة مميزة متطابقة مع بطرس وبولس
+            { q: "ما هو الاسم اليهودي الأصلي للقديس بولس الرسول؟", options: ["شاول", "سيمون", "سيلا", "برنابا"], correct: 0, ref: "أع 9:11" },
+            { q: "ما هو المعنى اليوناني لاسم 'بطرس'؟", options: ["المستمع", "الصخرة أو الحجر", "ابن الرعد", "المحب لله"], correct: 1, ref: "يو 1:42" },
+            { q: "من هو رفيق القديس بولس في رحلته التبشيرية الأولى؟", options: ["لوقا", "سيلا", "برنابا", "تيموثاوس"], correct: 2, ref: "أع 13:2" },
+            { q: "من هو رفيق بولس في رحلته التبشيرية الثانية بعد خلافه مع برنابا؟", options: ["سيلا", "مرقس", "أبلوس", "كرنيليوس"], correct: 0, ref: "أع 15:40" },
+            { q: "ما هي المهنة الأصلية للرسولين بطرس وأندراوس قبل دعوتهما؟", options: ["صنع الخيام", "صيد السمك", "جباية الضرائب", "الطب"], correct: 1, ref: "مت 4:18" },
+            { q: "من هو التلميذ المقرب الذي رافق بطرس ويعقوب في أحداث التجلي وبستان جثسيماني؟", options: ["توما", "فيلبس", "يوحنا الحبيب", "أندراوس"], correct: 2, ref: "مت 17:1" }
+        ],
 
-    const questions = [
-        // الأصحاح 1
-        { q: "من اشترك مع بولس في كتابة الرسالة بحسب التحية؟", options: ["بطرس", "تيموثاوس", "تيطس", "لوقا"], correct: 1 },
-        { q: "بماذا وصف بولس الله في بداية الأصحاح الأول؟", options: ["إله الجنود", "أب الرأفات وإله كل تعزية", "ديان الأرض", "خالق المسكونة"], correct: 1 },
-        { q: "لماذا يعزينا الله في كل ضيقتنا؟", options: ["لكي نتفاخر", "لكي نستطيع أن نعزي الذين هم في كل ضيقة", "لكي نبني كنائس", "لكي نترك الخدمة"], correct: 1 },
-        { q: "أين حدثت الضيقة التي جعلت بولس ييأس من الحياة؟", options: ["في روما", "في أورشليم", "في أسيا", "في قبرص"], correct: 2 },
-        { q: "كان حكم الموت في أنفسنا لكي لا نكون متكلين على أنفسنا بل على...؟", options: ["أصدقائنا", "الله الذي يقيم الأموات", "حكمتنا", "القانون"], correct: 1 },
-        { q: "ماذا طلب بولس من أهل كورنثوس أن يفعلوه من أجله في ضيقاته؟", options: ["يرسلوا مالاً", "يساعدوه بالصلاة", "يحاربوا عنه", "يهربوا معه"], correct: 1 },
-        { q: "وعود الله في المسيح هي الـ... والـ...؟", options: ["نعم / الآمين", "لا / كلا", "الربح / الخسارة", "البدء / النهاية"], correct: 0 },
-        { q: "من هو الذي يثبتنا معكم في المسيح وقد مسحنا؟", options: ["بطرس", "تيموثاوس", "الله", "الملاك"], correct: 2 },
-        { q: "ما هو العربون الذي أعطاه الله في قلوبنا؟", options: ["السلام", "الروح القدس", "الفرح", "الصبر"], correct: 1 },
-        { q: "لماذا قرر بولس ألا يأتي إليهم في حزن؟", options: ["لأنه كان مريضاً", "لكي لا يحزنهم بل يفرح بهم", "لأنه خاف منهم", "لأنه سافر لمكان آخر"], correct: 1 },
-        { q: "ماذا كتب بولس لهم بدموع كثيرة؟", options: ["وصايا جديدة", "توبيخاً قارساً لكي لا يحزنوا بل يعرفوا محبته", "خطة السفر", "شرحاً للناموس"], correct: 1 },
-        { q: "عن الشخص الذي أحزن الجميع، ماذا طلب بولس منهم؟", options: ["أن يطردوه", "أن يسامحوه ويعزوه", "أن يتجاهلوه", "أن يجلدوه"], correct: 1 },
-        { q: "لماذا يجب أن نسامح؟ لئلا يطمع فينا...؟", options: ["الرومان", "الشيطان", "اليهود", "الفلاسفة"], correct: 1 },
-        { q: "أين لم يجد بولس راحة لروحه لأنه لم يجد تيطس أخاه؟", options: ["في ترواس", "في أفسس", "في مكدونية", "في قبرص"], correct: 0 },
-        { q: "الله يقودنا في موكب... في المسيح كل حين؟", options: ["الصلاة", "النصرة", "الألم", "الخدمة"], correct: 1 },
-        { q: "نحن رائحة المسيح الذكية لله في...؟", options: ["الذين يخلصون والذين يهلكون", "المؤمنين فقط", "السماء فقط", "أهل أورشليم فقط"], correct: 0 },
-        { q: "من هي رسالة بولس المكتوبة في القلوب؟", options: ["الكتب المقدسة", "أهل كورنثوس أنفسهم", "رسائل الرسل", "الوصايا العشر"], correct: 1 },
-        { q: "رسالة المسيح ليست مكتوبة بحبر بل بـ...؟", options: ["قلم رصاص", "روح الله الحي", "دموع بولس", "دم الشهداء"], correct: 1 },
-        { q: "الحرف يقتل ولكن الروح...؟", options: ["يهدي", "يحيي", "يبني", "ينذر"], correct: 1 },
-        { q: "لماذا كان بنو إسرائيل لا يقدرون أن ينظروا إلى وجه موسى؟", options: ["بسبب طول لحيته", "بسبب بريق وجهه (المجد)", "بسبب غضب موسى", "بسبب الشمس"], correct: 1 },
-        { q: "أينما كان روح الرب فهناك...؟", options: ["قوة", "حرية", "خوف", "سكون"], correct: 1 },
-        { q: "نحن جميعاً ناظرين مجد الرب بوجه مكشوف نتغير إلى تلك الصورة من...؟", options: ["قوة إلى قوة", "مجد إلى مجد", "فرح إلى فرح", "بر إلى بر"], correct: 1 },
-        { q: "بماذا وصف بولس إله هذا الدهر (الشيطان)؟", options: ["أنه مضل", "أنه أعمى أذهان غير المؤمنين", "أنه عدو الخير", "أنه أسد زائر"], correct: 1 },
-        { q: "نحن مضغوطون من كل جانب لكن غير...؟", options: ["متحيرين", "متضايقين", "يائسين", "منكسرين"], correct: 1 },
-        { q: "خفيف ضيقتنا الوقتي ينشئ لنا أكثر فأكثر ثقل... أبدياً؟", options: ["راحة", "مجد", "جزاء", "ملك"], correct: 1 },
-        { q: "الأشياء التي تُرى... أما التي لا تُرى فـ...؟", options: ["وقتية / أبدية", "حقيقية / خيالية", "جميلة / قبيحة", "صعبة / سهلة"], correct: 0 },
-        { q: "إن نقض بيت خيمتنا الأرضي (الجسد)، فلنا بناء من الله...؟", options: ["في أورشليم", "بيت غير مصنوع بيد أبدي في السماوات", "في القبر", "في روما"], correct: 1 },
-        { q: "لأننا نسلك بـ... لا بالعيان؟", options: ["العقل", "الإيمان", "القوة", "الخبرة"], correct: 1 },
-        { q: "لأنه لابد أننا جميعاً نُظهر أمام كرسي...؟", options: ["بطرس", "المسيح", "الملك", "القضاء"], correct: 1 },
-        { q: "محبة المسيح...؟", options: ["ترشدنا", "تحصرنا", "تفرحنا", "تعزينا"], correct: 1 },
-        { q: "إن كان أحد في المسيح فهو...؟", options: ["خليقة جديدة", "خادم أمين", "تلميذ بار", "قديس عظيم"], correct: 0 },
-        { q: "الله كان في المسيح مصالحاً... لنفسه؟", options: ["اليهود", "العالم", "الرسل", "الأمم"], correct: 1 },
-        { q: "نسعى كـ... عن المسيح كأن الله يعظ بنا؟", options: ["جنود", "سفراء", "خدام", "وكلاء"], correct: 1 },
-        { q: "يقول بولس: هوذا الآن وقت... هوذا الآن يوم...؟", options: ["صلاة / فرح", "مقبول / خلاص", "خدمة / ضيق", "توبة / سلام"], correct: 1 },
-        { q: "لا تكونوا تحت نير مع...؟", options: ["الخطاة", "غير المؤمنين", "الأغنياء", "الفقراء"], correct: 1 },
-        { q: "أية شركة للبر والإثم؟ وأي اتصال للنور والـ...؟", options: ["شر", "ظلمة", "موت", "نار"], correct: 1 },
-        { q: "أنتم هيكل...؟", options: ["سليمان", "الله الحي", "الجسد", "القدس"], correct: 1 },
-        { q: "بماذا تعزى بولس عند مجيء تيطس؟", options: ["بإرسالية المال", "بتعزية أهل كورنثوس وأشواقهم", "بأخبار السفر", "بالهدايا"], correct: 1 },
-        { q: "الحزن الذي بحسب مشيئة الله ينشئ...؟", options: ["بكاءً", "توبة للخلاص بلا ندامة", "يأساً", "مرضاً"], correct: 1 },
-        { q: "حزن العالم ينشئ...؟", options: ["توبة", "موتاً", "فرحاً", "تغييراً"], correct: 1 },
-        { q: "أي كنائس ضرب بها بولس المثل في سخاء العطاء رغم فقرها؟", options: ["غلاطية", "مكدونية", "أفسس", "روما"], correct: 1 },
-        { q: "تعرفون نعمة ربنا يسوع أنه من أجلكم افتقر وهو... لكي تستغنوا أنتم بفقره؟", options: ["ملك", "غني", "قوي", "قدوس"], correct: 1 },
-        { q: "من يزرع بالشح فبالشح أيضاً...؟", options: ["يحصد", "ينمو", "يربح", "يعطي"], correct: 0 },
-        { q: "المعطي... يحبه الله؟", options: ["الكثير", "المسرور", "المجبر", "الحكيم"], correct: 1 },
-        { q: "أسلحة محاربتنا ليست... بل قادرة بالله على هدم حصون؟", options: ["ضعيفة", "جسدية", "قديمة", "قليلة"], correct: 1 },
-        { q: "من افتخر فليفتخر بـ...؟", options: ["نفسه", "بالرب", "بأعماله", "بذكائه"], correct: 1 },
-        { q: "كم مرة جلد بولس من اليهود أربعين إلا واحداً؟", options: ["مرة", "ثلاث مرات", "خمس مرات", "عشر مرات"], correct: 2 },
-        { q: "أين اختطف بولس ورأى أشياء لا يسوغ لإنسان أن يتكلم بها؟", options: ["إلى دمشق", "إلى الفردوس (السماء الثالثة)", "إلى الهيكل", "إلى جبل سيناء"], correct: 1 },
-        { q: "ماذا أعطي لبولس لئلا يرتفع بفرط الإعلانات؟", options: ["مرض عينين", "شوكة في الجسد", "فقر شديد", "اضطهاد"], correct: 1 },
-        { q: "بماذا أجاب الرب بولس حين طلب رفع الشوكة؟", options: ["سأرفعها غداً", "تكفيك نعمتي لأن قوتي في الضعف تكمل", "اصبر قليلاً", "أنت رجل قوي"], correct: 1 }
-    ];
-
-    let current = 0, answers = new Array(questions.length).fill(null), timeLeft = 25 * 60, timer;
-    let userData = {};
-
-    function startQuiz() {
-        const nameInput = document.getElementById('u-name').value.trim();
-        if (nameInput === "adminreset") {
-            localStorage.removeItem('quiz_completed_2co_50');
-            alert("تم مسح الحظر بنجاح.");
-            location.reload();
-            return;
-        }
-
-        if (localStorage.getItem('quiz_completed_2co_50')) {
-            switchScreen('block-screen');
-            return;
-        }
-
-        userData = {
-            name: nameInput,
-            phone: document.getElementById('u-phone').value.trim(),
-            address: document.getElementById('u-address').value.trim(),
-            birthdate: document.getElementById('u-birthdate').value
-        };
-
-        if(!userData.name || !userData.phone || !userData.address || !userData.birthdate) return alert("برجاء إدخال كافة البيانات.");
+        part2: [
+            { q: "من هو كاتب سفر أعمال الرسل المبارك؟", options: ["بطرس الرسول", "لوقا الطبيب", "بولس الرسول", "يوحنا الحبيب"], correct: 1, ref: "أع 1:1" },
+            { q: "إلى من وُجه سفر أعمال الرسل في بدايته؟", options: ["كيرلس", "ثاوفيلس", "كرنيليوس", "فستوس"], correct: 1, ref: "أع 1:1" },
+            { q: "كم يوماً مكث السيد المسيح يظهر للتلاميذ بعد قيامته قبل الصعود؟", options: ["30 يوماً", "40 يوماً", "50 يوماً", "7 أيام"], correct: 1, ref: "أع 1:3" },
+            { q: "ما اسم الجبل الذي صعد منه السيد المسيح إلى السماء؟", options: ["جبل الزيتون", "جبل التجلي", "جبل سيناء", "جبل حوريب"], correct: 0, ref: "أع 1:12" },
+            { q: "من هو الرسول الذي اختير بالقرعة ليكون بديلاً ليهوذا الإسخريوطي؟", options: ["برنابا", "متياس", "سيلا", "تيموثاوس"], correct: 1, ref: "أع 1:26" },
+            { q: "بأي مظهر حل الروح القدس على التلاميذ في يوم الخمسين؟", options: ["سحابة منيرة", "ألسنة منقسمة كأنها من نار", "حمامة ودودة", "برق ورعد شديد"], correct: 1, ref: "أع 2:3" },
+            { q: "ما هو عدد النفوس التي آمنت بعد عظة القديس بطرس الأولى؟", options: ["نحو ألف نفس", "نحو ثلاثة آلاف نفس", "نحو خمسة آلاف نفس", "مئة وعشرون نفساً"], correct: 1, ref: "أع 2:41" },
+            { q: "أين كان يوضع الرجل الأعرج من بطن أمه يومياً ليسأل الصدقة؟", options: ["عند عتبة الهيكل الخارجية", "عند باب الهيكل الذي يقال له الجميل", "بجانب مذبح المحرقة", "خارج أسوار أورشليم"], correct: 1, ref: "أع 3:2" },
+            { q: "ماذا قال بطرس للرجل الأعرج قبل أن يشفيه باسم يسوع المسيح؟", options: ["صلاتك قد سُمعت", "ليس لي فضة ولا ذهب ولكن الذي لي فإياه أعطيك", "اذهب واغتسل في بركة سلوام", "قم واحمل سريرك واذهب"], correct: 1, ref: "أع 3:6" },
+            { q: "من هما الزوجان اللذان ماتا فجأة بعد أن كذبا على الروح القدس؟", options: ["أكيلا وبريسكلا", "حنانيا وسفيرة", "أندراوس ومريم", "زكريا وأليصابات"], correct: 1, ref: "أع 5:1-10" },
+            { q: "من هو معلم الناموس الفريسي الذي نصح مجمع اليهود بترك الرسل وشأنهم؟", options: ["شاول الطرسوسي", "غمالائيل", "قيافا", "حنان رئيس الكهنة"], correct: 1, ref: "أع 5:34" },
+            { q: "كم كان عدد الشمامسة الذين اختارتهم الكنيسة الأولى لخدمة الموائد؟", options: ["ثلاثة شمامسة", "سبعة شمامسة", "اثنا عشر شماساً", "سبعون شماساً"], correct: 1, ref: "أع 6:3" },
+            { q: "من هو أول شهيد في المسيحية رُجم وهو يشاهد السماء مفتوحة؟", options: ["يعقوب بن زبدي", "إستيفانوس", "فيلبس المبشر", "أندراوس الرسول"], correct: 1, ref: "أع 7:59" },
+            { q: "أين ذهب فيلبس المبشر ليكرز بالمسيح بعد تشتت الكنيسة في أورشليم؟", options: ["إلى أنطاكية", "إلى السامرة", "إلى دمشق", "إلى غزة"], correct: 1, ref: "أع 8:5" },
+            { q: "ما اسم الساحر الذي حاول شراء موهبة وضع الأيدي بتقديم المال؟", options: ["بار يشوع", "سيمون الساحر", "عليم", "ديومتريوس"], correct: 1, ref: "أع 8:18" },
+            { q: "من هو الشخص المقرب من ملكة كنداكة الحبشية الذي عمّده فيلبس؟", options: ["قائد الجيش الحبشي", "الخصي الحبشي وزير الخزانة", "حارس القصر الملكي", "رسول الملكة الخاص"], correct: 1, ref: "أع 8:27" },
+            { q: "على أي طريق ظهر السيد المسيح لشاول الطرسوسي بغتة بنور ساطع؟", options: ["طريق أورشليم", "طريق دمشق", "طريق يافا", "طريق السامرة"], correct: 1, ref: "أع 9:3" },
+            { q: "من هو التلميذ الذي أرسله الرب في رؤيا ليعمد شاول في دمشق؟", options: ["سيلا", "حنانيا", "تيموثاوس", "برنابا"], correct: 1, ref: "أع 9:10" },
+            { q: "ما اسم التلميذة التقيّة التي أقامها بطرس من الموت في يافا؟", options: ["ليديا", "طابيثا (غزالة)", "مريم المجدلية", "بريسكلا"], correct: 1, ref: "أع 9:36" },
+            { q: "من هو قائد المئة الروماني التقي الذي استدعى بطرس ليعمده؟", options: ["فيلكس الوالي", "كرنيليوس", "يوليوس القائد", "فستوس"], correct: 1, ref: "أع 10:1" },
+            { q: "ما هي الرؤيا التي رآها بطرس لتمهيد قبول الأمم للإيمان؟", options: ["ملاك بيده سيف", "ملاءة عظيمة نازلة من السماء بها حيوانات مختلفة", "هيكل مبني من الحجارة", "شجرة زيتون مغروسة"], correct: 1, ref: "أع 10:11" },
+            { q: "في أي مدينة دُعي التلاميذ 'مسيحيين' لأول مرة في التاريخ؟", options: ["أورشليم", "أنطاكية", "روما", "أفسس"], correct: 1, ref: "أع 11:26" },
+            { q: "من هو أول رسول من الاثني عشر استشهد بحد السيف على يد هيرودس؟", options: ["بطرس الرسول", "يعقوب أخو يوحنا", "أندراوس", "متياس"], correct: 1, ref: "أع 12:2" },
+            { q: "كيف خرج بطرس الرسول من السجن المشدد الذي وضعه فيه هيرودس؟", options: ["بواسطة زلزال هدم السجن", "بواسطة ملاك الرب الذي فك قيوده", "بمساعدة حراس السجن", "بواسطة تبرئة الوالي له"], correct: 1, ref: "أع 12:7" },
+            { q: "من هي الجارية التي خرجت لتفتح الباب لبطرس بعد نجاته ولم يصدقها الآخرون؟", options: ["ليديا", "رودا", "مريم", "سفيرة"], correct: 1, ref: "أع 12:13" },
+            { q: "كيف مات هيرودس الملك بعد كبريائه وعدم تمجيده لله؟", options: ["غرقاً في البحر", "ضربه ملاك الرب فأكله الدود ومات", "قُتل في معركة حرب", "أصيب بالجنون وقتل نفسه"], correct: 1, ref: "أع 12:23" },
+            { q: "ما معنى اسم 'برنابا' الذي أطلقه الرسل على يوسف اللاوي؟", options: ["ابن الصعداء", "ابن الواعظ (أو ابن التعزية)", "المختار من الله", "رسول الأمم"], correct: 1, ref: "أع 4:36" },
+            { q: "من هو الشخص الذي ذهب برنابا إلى طرسوس ليحضره للخدمة في أنطاكية؟", options: ["تيموثاوس", "شاول (بولس)", "مرقس الرسول", "لوقا الطبيب"], correct: 1, ref: "أع 11:25" },
+            { q: "من كان يقود الكنيسة بالصلاة والصوم حين قال الروح: 'افرزوا لي برنابا وشاول'؟", options: ["أهل أورشليم", "الأنبياء والمعلمون في أنطاكية", "المجمع المقدس في قيصرية", "جنود الإمبراطورية"], correct: 1, ref: "أع 13:1-2" },
+            { q: "كم كان عدد النفوس المجتمعة معاً في العلية عند اختيار بديل يهوذا؟", options: ["نحو 50 نفساً", "نحو 120 نفساً", "نحو 300 نفس", "نحو 500 نفس"], correct: 1, ref: "أع 1:15" }
+        ],
         
-        switchScreen('quiz-screen');
-        document.getElementById('timer-box').style.display = 'inline-block';
-        initQuiz();
-        startTimer();
+        part3: [
+            { q: "ما هو الاسم الآخر لشاول الطرسوسي الذي بدأ يُعرف به رسمياً في رحلته الأولى؟", options: ["برنابا", "بولس", "سيلا", "تيطس"], correct: 1, ref: "أع 13:9" },
+            { q: "ما هي العاهة التي أصابت عليم الساحر بعد مقاومته لكرازة بولس؟", options: ["خرس كامل", "عمى مؤقت وضباب", "شلل في اليدين", "صمم شديد"], correct: 1, ref: "أع 13:11" },
+            { q: "في أي مدينة رجم اليهود بولس الرسول حتى ظنوا أنه مات وجروه خارجاً؟", options: ["أنطاكية بيسيدية", "لسترة", "أيقونية", "درية"], correct: 1, ref: "أع 14:19" },
+            { q: "أين عُقد المجمع الرسولي الأول لمناقشة قضية تهود الأمم؟", options: ["في أنطاكية", "في أورشليم", "في روما", "في أفسس"], correct: 1, ref: "أع 15:2" },
+            { q: "ما هو الخلاف الذي أدى إلى انفصال بولس وبرنابا في الخدمة؟", options: ["الخلاف على الوجهة التبشيرية", "الخلاف على أخذ يوحنا الملقب مرقس معهما", "الخلاف على جمع التبرعات", "الخلاف حول شروط العماد"], correct: 1, ref: "أع 15:37-39" },
+            { q: "من هو الشاب التقي الذي رافق بولس في لسترة وكانت أمه يهودية وأبوه يونانياً؟", options: ["لوقا", "تيموثاوس", "تيطس", "أبلوس"], correct: 1, ref: "أع 16:1-3" },
+            { q: "ما هي الرؤيا التوجيهية التي رآها بولس ليذهب ويكرز في مكدونية (أوروبا)؟", options: ["رجل يقف فوق قمة جبل", "رجل مكدوني يطلب إليه: اعبر إلى مكدونية وأعنا", "حمامة تطير نحو الغرب", "سفينة كبيرة تدعوه للصعود"], correct: 1, ref: "أع 16:9" },
+            { q: "من هي أول امرأة آمنت واعتمدت في فيلبي وكانت بائعة للأرجوان؟", options: ["بريسكلا", "ليديا بائعة الأرجوان", "دامرس", "طابيثا"], correct: 1, ref: "أع 16:14" },
+            { q: "ماذا حدث لسجن فيلبي ليلاً بينما كان بولس وسيلا يسبحان الله؟", options: ["حريق هائل بالخارج", "زلزلة عظيمة تزعزعت لها أساسات السجن وانفتحت الأبواب", "هجوم من المؤمنين لتهريبهما", "عاصفة رعدية أرعبت الجنود"], correct: 1, ref: "أع 16:26" },
+            { q: "ماذا قال بولس وسيلا لسجان فيلبي عندما سأل: 'ماذا ينبغي أن أفعل لكي أخلص؟'؟", options: ["اعمل أعمالاً صالحة بكثرة", "آمن بالرب يسوع المسيح فتخلص أنت وأهل بيتك", "التزم بناموس موسى والأنبياء", "تصدق بنصف أموالك"], correct: 1, ref: "أع 16:31" },
+            { q: "بم تميز أهل مدينة بيرية مقارنة بأهل تسالونيكي؟", options: ["كانوا مقتدرين في الفلسفة اليونانية", "كانوا أشرف وقبلوا الكلمة بنشاط فاحصين الكتب يومياً", "كانوا يبنون كنائس ضخمة سريعاً", "كانوا يقاومون بولس بشدة"], correct: 1, ref: "أع 17:11" },
+            { q: "أين ألقى بولس الرسول خطابه الشهير عن 'الإله المجهول' أمام الفلاسفة؟", options: ["في ساحة المدينة العامة", "في أريوس باغوس بأثينا", "في معبد ديانا الوثني", "في مجمع اليهود بقرنتس"], correct: 1, ref: "أع 17:22" },
+            { q: "من هما الزوجان صانعا الخيام اللذان استضافا بولس في كورنثوس؟", options: ["حنانيا وسفيرة", "أكيلا وبريسكلا", "فيلبس ومريم", "يوسف وأسينات"], correct: 1, ref: "أع 18:2-3" },
+            { q: "كم المدة التي قضاها بولس الرسول يعلم ويكرز بكلمة الله في مدينة أفسس؟", options: ["سنة واحدة", "نحو ثلاث سنين", "خمس سنوات", "أربعين يوماً"], correct: 1, ref: "أع 20:31" },
+            { q: "من هو الشاب الذي غلبه النوم وسقط من الطبقة الثالثة ومات ثم أقامه بولس؟", options: ["تيموثاوس", "أفتيخوس", "أناثيموس", "أغابوس"], correct: 1, ref: "أع 20:9-10" },
+            { q: "من هو الفيلسوف الإسكندري المقتدر الذي علمه أكيلا وبريسكلا طريق الرب بدقة؟", options: ["شاول", "أبلوس", "عليم", "ديونيسيوس"], correct: 1, ref: "أع 18:24-26" },
+            { q: "من هو نبي العهد الجديد الذي تنبأ بأسر بولس في أورشليم بربط يد نفسه ومنطقته؟", options: ["زكريا", "أغابوس", "سيلا", "نيكانور"], correct: 1, ref: "أع 21:10-11" },
+            { q: "من هو رئيس الكهنة الذي أمر بضرب بولس على فمه في المحاكمة؟", options: ["قيافا", "حنانيا رئيس الكهنة", "أنس", "ملك صادق"], correct: 1, ref: "أع 23:2-3" },
+            { q: "من هو الوالي الروماني الذي ارتعد عندما تكلم معه بولس عن البر والتعفف والدينونة؟", options: ["بيلاطس البنطي", "فيلكس الوالي", "فستوس", "كلاوديوس ليسياس"], correct: 1, ref: "أع 24:25" },
+            { q: "من هو الوالي الروماني الذي اتهم بولس بالهذيان قائلاً: 'الكتب الكثيرة تحولك إلى الهذيان'؟", options: ["فيلكس", "فستوس", "أغريباس", "يوليوس"], correct: 1, ref: "أع 26:24" },
+            { q: "من هو الملك الذي قال لبولس: 'بقليل تقنعني أن أصير مسيحياً'؟", options: ["هيرودس أغريباس الثاني", "هيرودس الكبير", "أغريباس الملك", "أرخيلاوس"], correct: 2, ref: "أع 26:28" },
+            { q: "إلى أي جزيرة نجا ركاب السفينة التي تحطمت بالبحر وكان متنها بولس أسيراً؟", options: ["قبرص", "مليطة (مالطا)", "كريت", "رودس"], correct: 1, ref: "أع 28:1" },
+            { q: "ما المعجزة التي حدثت لبولس في جزيرة مليطة عندما نشبت بيده أفعى سامة؟", options: ["شُفي بصلوات أهل الجزيرة", "لم يصبه أي سوء ونفض الأفعى في النار", "صنع ترياقاً من النباتات", "سقط ميتاً ثم قام"], correct: 1, ref: "أع 28:5" },
+            { q: "كيف قضى بولس سنتين كاملتين في نهاية سفر أعمال الرسل في روما؟", options: ["سجيناً في زنزانة مظلمة", "في بيته المستأجر يقبل جميع الذين يدخلون إليه كارزاً", "منفياً في جزيرة نائية", "خادماً في قصر قيصر"], correct: 1, ref: "أع 28:30" },
+            { q: "ما هي الطائفة اليهودية التي كانت تنكر القيامة والملائكة وناصبت الرسل العداء؟", options: ["الفريسيون", "الصدوقيون", "الكتبة", "الناموسيون"], correct: 1, ref: "أع 23:8" },
+            { q: "من هو الصائغ الذي أثارت تجارة تماثيل الإلهة أرطاميس لديه شغباً عظيماً ضد بولس؟", options: ["سيمون", "ديمتريوس صائغ الفضة", "ألكسندر", "ياسون"], correct: 1, ref: "أع 19:24" },
+            { q: "من هما التلميذان اللذان أرسلتهما الكنيسة للسامرة ليضعا الأيدي ويحل الروح القدس؟", options: ["بولس وبرنابا", "بطرس ويوحنا", "فيلبس واندراوس", "متياس وتوما"], correct: 1, ref: "أع 8:14" },
+            { q: "كم كان عدد الجنود الذين أمر هيرودس بحراسة بطرس الرسول في السجن؟", options: ["جنديان فقط", "أربعة أرابع من العسكر (16 جندياً)", "مئة جندي روماني", "كتيبة كاملة"], correct: 1, ref: "أع 12:4" },
+            { q: "من هو ساحر قبرص والنبي الكذاب الذي واجه بولس وحاول إفساد الوالي عن الإيمان؟", options: ["سيمون الساحر", "بار يشوع (عليم الساحر)", "أغابوس", "ديومتريوس"], correct: 1, ref: "أع 13:6" },
+            { q: "أين ولد بولس الرسول (شاول الطرسوسي) ومن أي سبط من إسرائيل كان؟", options: ["أورشليم - سبط يهوذا", "طرسوس كيليكية - سبط بنيامين", "السامرة - سبط لاوي", "دمشق - سبط أفرايم"], correct: 1, ref: "أع 21:39" }
+        ]
+    };
+
+    let gameQuestions = [];
+    let currentQuestionIndex = 0;
+    let turn = 1; // 1 = Team 1, 2 = Team 2
+    let originalTurn = 1; 
+    let scores = { team1: 0, team2: 0 };
+    let teamNames = { team1: "", team2: "" };
+    let countdownTimer = null;
+    let initialTime = 30; 
+    let currentTimerValue = 30;
+    let stealActive = false;
+    let currentCorrectIndex = -1;
+    let synth = null;
+    let isMuted = true;
+
+    function initAudio() {
+        try {
+            Tone.start();
+            synth = new Tone.Synth().toDestination();
+            isMuted = false;
+            document.getElementById('audio-banner').classList.add('hidden');
+            playChimeSound('up');
+        } catch (e) {
+            console.warn("Audio Context delay setup", e);
+        }
     }
 
-    function initQuiz() {
-        const wrapper = document.getElementById('q-wrapper');
-        const grid = document.getElementById('nav-grid');
-        wrapper.innerHTML = ""; grid.innerHTML = "";
-        questions.forEach((q, i) => {
-            const div = document.createElement('div');
-            div.className = `screen ${i===0?'active-screen':''}`;
-            div.id = `q-cnt-${i}`;
-            div.innerHTML = `<div style="font-weight:bold; margin-bottom:15px; text-align:right;">${i+1}. ${q.q}</div>${q.options.map((opt, idx) => `<div class="option-item" id="opt-${i}-${idx}" onclick="select(${i}, ${idx})">${opt}</div>`).join('')}`;
-            wrapper.appendChild(div);
-            
-            const dot = document.createElement('div');
-            dot.className = `nav-dot ${i===0?'current':''}`;
-            dot.id = `dot-${i}`; dot.innerText = i+1; dot.onclick = () => jump(i);
-            grid.appendChild(dot);
+    function playChimeSound(type) {
+        if (isMuted || !synth) return;
+        
+        const now = Tone.now();
+        if (type === 'up') {
+            synth.triggerAttackRelease("C4", "16n", now);
+            synth.triggerAttackRelease("E4", "16n", now + 0.1);
+            synth.triggerAttackRelease("G4", "16n", now + 0.2);
+            synth.triggerAttackRelease("C5", "8n", now + 0.3);
+        } else if (type === 'down') {
+            synth.triggerAttackRelease("F#3", "8n", now);
+            synth.triggerAttackRelease("F3", "8n", now + 0.15);
+            synth.triggerAttackRelease("E3", "4n", now + 0.3);
+        } else if (type === 'click') {
+            synth.triggerAttackRelease("C5", "32n", now);
+        } else if (type === 'victory') {
+            synth.triggerAttackRelease("C4", "8n", now);
+            synth.triggerAttackRelease("G4", "8n", now + 0.15);
+            synth.triggerAttackRelease("C5", "8n", now + 0.3);
+            synth.triggerAttackRelease("E5", "8n", now + 0.45);
+            synth.triggerAttackRelease("G5", "4n", now + 0.6);
+        }
+    }
+
+    function startGame() {
+        playChimeSound('click');
+        
+        teamNames.team1 = document.getElementById('team1-name').value.trim() || "فريق قيثارة الروح";
+        teamNames.team2 = document.getElementById('team2-name').value.trim() || "فريق أسود الإنجيل";
+        
+        const selectedScope = document.getElementById('epistle-select').value;
+        const selectedCount = document.getElementById('q-count-select').value;
+        initialTime = parseInt(document.getElementById('timer-select').value, 10);
+        
+        let sourcePool = [];
+        if (selectedScope === 'part1') {
+            // القسم الأول: يحتوي على الـ 24 سؤال المطلوبة أولاً في الترتيب بدون خلط عشوائي لتظهر دائماً أولاً
+            sourcePool = [...questionsDatabase.part1];
+        } else if (selectedScope === 'part2') {
+            sourcePool = [...questionsDatabase.part2];
+            sourcePool.sort(() => Math.random() - 0.5); // خلط القسم الثاني عشوائياً
+        } else if (selectedScope === 'part3') {
+            sourcePool = [...questionsDatabase.part3];
+            sourcePool.sort(() => Math.random() - 0.5); // خلط القسم الثالث عشوائياً
+        }
+
+        // تحديد الحجم المقتطع (10، 20، أو 30 سؤالاً)
+        const finalCount = parseInt(selectedCount, 10);
+        gameQuestions = sourcePool.slice(0, Math.min(finalCount, sourcePool.length));
+
+        // تصفير النقاط والعدّادات والقرعة العشوائية للفريق البادئ
+        scores.team1 = 0;
+        scores.team2 = 0;
+        currentQuestionIndex = 0;
+        turn = Math.random() > 0.5 ? 1 : 2; 
+        originalTurn = turn;
+        stealActive = false;
+
+        document.getElementById('t1-display-name').innerText = teamNames.team1;
+        document.getElementById('t2-display-name').innerText = teamNames.team2;
+        updateScoresUI();
+
+        // التبديل الحركي للشاشات
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('play-screen').classList.remove('hidden');
+
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        stealActive = false;
+        document.getElementById('steal-btn').classList.add('hidden');
+        document.getElementById('next-btn').classList.add('hidden');
+        document.getElementById('feedback-panel').classList.add('hidden');
+        
+        originalTurn = turn;
+        updateTurnDisplay();
+
+        const currentQuestion = gameQuestions[currentQuestionIndex];
+        currentCorrectIndex = currentQuestion.correct;
+
+        document.getElementById('progress-text').innerText = `${currentQuestionIndex + 1}/${gameQuestions.length}`;
+        document.getElementById('question-text').innerText = currentQuestion.q;
+        
+        // عرض اسم القسم الدقيق في ترويسة السؤال
+        const selectedScope = document.getElementById('epistle-select').value;
+        if (selectedScope === 'part1') {
+            document.getElementById('question-source').innerText = "القسم الأول: القديسان بطرس وبولس 📜";
+        } else if (selectedScope === 'part2') {
+            document.getElementById('question-source').innerText = "القسم الثاني: أعمال الرسل (1-12) 📜";
+        } else {
+            document.getElementById('question-source').innerText = "القسم الثالث: أعمال الرسل (13-28) 📜";
+        }
+
+        const grid = document.getElementById('options-grid');
+        grid.innerHTML = '';
+        currentQuestion.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = "w-full bg-slate-700/80 border border-slate-600 hover:bg-slate-600/90 text-slate-100 font-bold p-4 rounded-xl shadow text-right transition duration-150 flex items-center justify-between group active:scale-[0.98]";
+            btn.onclick = () => submitAnswer(idx, btn);
+            btn.innerHTML = `
+                <span>${opt}</span>
+                <span class="bg-slate-800 text-slate-400 group-hover:bg-amber-500 group-hover:text-slate-900 w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs transition duration-150">
+                    ${idx + 1}
+                </span>
+            `;
+            grid.appendChild(btn);
         });
+
+        resetTimer();
     }
 
-    function select(qIdx, optIdx) {
-        answers[qIdx] = optIdx;
-        document.querySelectorAll(`#q-cnt-${qIdx} .option-item`).forEach((el, idx) => el.classList.toggle('selected', idx === optIdx));
-        document.getElementById(`dot-${qIdx}`).classList.add('answered');
-        setTimeout(() => nav(1), 200);
-    }
+    function resetTimer() {
+        if (countdownTimer) clearInterval(countdownTimer);
+        
+        if (initialTime === 0) {
+            document.getElementById('q-timer').style.display = 'none';
+            return;
+        }
 
-    function jump(n) {
-        if(n < 0 || n >= questions.length) return;
-        document.querySelectorAll('#q-wrapper > div').forEach(c => c.classList.remove('active-screen'));
-        document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('current'));
-        current = n;
-        document.getElementById(`q-cnt-${current}`).classList.add('active-screen');
-        document.getElementById(`dot-${current}`).classList.add('current');
-        document.getElementById('finish-btn').style.display = (current === questions.length - 1) ? 'block' : 'none';
-    }
+        document.getElementById('q-timer').style.display = 'inline-block';
+        currentTimerValue = initialTime;
+        document.getElementById('q-timer').innerText = currentTimerValue;
+        document.getElementById('q-timer').classList.remove('bg-red-500/20', 'text-red-400');
+        document.getElementById('q-timer').classList.add('bg-slate-800', 'text-slate-200');
 
-    function nav(step) { let t = current + step; if(t >= 0 && t < questions.length) jump(t); }
+        countdownTimer = setInterval(() => {
+            currentTimerValue--;
+            document.getElementById('q-timer').innerText = currentTimerValue;
 
-    function startTimer() {
-        timer = setInterval(() => {
-            timeLeft--;
-            if(timeLeft <= 0) finishQuiz();
-            const m = Math.floor(timeLeft/60), s = timeLeft%60;
-            document.getElementById('timer-box').innerText = `${m}:${s<10?'0':''}${s}`;
+            if (currentTimerValue <= 5) {
+                document.getElementById('q-timer').classList.remove('bg-slate-800', 'text-slate-200');
+                document.getElementById('q-timer').classList.add('bg-red-500/20', 'text-red-400', 'animate-ping');
+                setTimeout(() => document.getElementById('q-timer').classList.remove('animate-ping'), 500);
+            }
+
+            if (currentTimerValue <= 0) {
+                clearInterval(countdownTimer);
+                handleTimeOut();
+            }
         }, 1000);
     }
 
-    function finishQuiz() {
-        clearInterval(timer);
-        localStorage.setItem('quiz_completed_2co_50', 'true');
-
-        let score = 0;
-        questions.forEach((q, i) => { if(answers[i] === q.correct) score++; });
+    function submitAnswer(selectedIndex, clickedBtn) {
+        if (countdownTimer) clearInterval(countdownTimer);
         
-        document.getElementById('final-score').innerText = `${score}/${questions.length}`;
-        switchScreen('finish-screen');
-        document.getElementById('timer-box').style.display = 'none';
+        const currentQuestion = gameQuestions[currentQuestionIndex];
+        const panel = document.getElementById('feedback-panel');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        const refMsg = document.getElementById('ref-msg');
         
-        saveToGoogleSheets(score);
-        generateReview();
-    }
+        const buttons = document.querySelectorAll('#options-grid button');
+        buttons.forEach(b => b.disabled = true);
 
-    async function saveToGoogleSheets(score) {
-        const status = document.getElementById('status-msg');
-        status.innerText = "جاري إرسال النتيجة للسجل...";
+        const activeTeamName = turn === 1 ? teamNames.team1 : teamNames.team2;
 
-        const data = { ...userData, quizName: "2 Corinthians 50Q", score: score, timestamp: new Date().toLocaleString('ar-EG') };
+        if (selectedIndex === currentCorrectIndex) {
+            playChimeSound('up');
+            clickedBtn.className = "w-full bg-emerald-600 text-slate-950 font-black p-4 rounded-xl shadow text-right transition duration-150 flex items-center justify-between";
+            
+            let pointsGained = stealActive ? 5 : 10;
+            if (turn === 1) scores.team1 += pointsGained;
+            else scores.team2 += pointsGained;
 
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            status.innerText = "تم حفظ النتائج في الإكسيل بنجاح ✅";
-            status.style.color = "var(--success)";
-        } catch (error) {
-            status.innerText = "تم تسجيل نتيجتك بنجاح.";
+            panel.className = "p-4 rounded-xl text-center font-bold border bg-emerald-500/10 border-emerald-500/30 text-emerald-300";
+            feedbackMsg.innerText = `✅ إجابة صحيحة رائعة لـ ${activeTeamName}! (+${pointsGained} نقطة)`;
+            
+            refMsg.innerText = currentQuestion.ref ? `المرجع الكتابي: ${currentQuestion.ref}` : "";
+            
+            panel.classList.remove('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+            updateScoresUI();
+        } else {
+            playChimeSound('down');
+            clickedBtn.className = "w-full bg-red-600 text-slate-100 font-bold p-4 rounded-xl shadow text-right transition duration-150 flex items-center justify-between";
+            
+            setTimeout(() => {
+                const rightBtn = buttons[currentCorrectIndex];
+                if (rightBtn) rightBtn.className = "w-full bg-emerald-600/90 text-slate-950 font-black p-4 rounded-xl shadow text-right transition duration-150 flex items-center justify-between";
+            }, 300);
+
+            panel.className = "p-4 rounded-xl text-center font-bold border bg-red-500/10 border-red-500/30 text-red-300";
+            feedbackMsg.innerText = `❌ إجابة خاطئة من ${activeTeamName}!`;
+            refMsg.innerText = "";
+            panel.classList.remove('hidden');
+
+            if (!stealActive) {
+                stealActive = true;
+                document.getElementById('steal-btn').classList.remove('hidden');
+                document.getElementById('next-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('next-btn').classList.remove('hidden');
+            }
         }
     }
 
-    function generateReview() {
-        const reviewList = document.getElementById('review-list');
-        let html = "";
-        questions.forEach((q, i) => {
-            const isCorrect = answers[i] === q.correct;
-            html += `
-                <div class="review-card ${isCorrect ? 'correct-card' : 'wrong-card'}">
-                    <b>${i + 1}. ${q.q}</b>
-                    <div style="margin-top:5px;">
-                        <span>إجابتك: ${answers[i] !== null ? q.options[answers[i]] : 'لم يتم الإجابة'}</span>
-                        ${!isCorrect ? `<br><span style="color:var(--success)">الصحيح: ${q.options[q.correct]}</span>` : ''}
-                    </div>
-                </div>`;
+    function triggerSteal() {
+        playChimeSound('click');
+        document.getElementById('steal-btn').classList.add('hidden');
+        document.getElementById('feedback-panel').classList.add('hidden');
+
+        turn = turn === 1 ? 2 : 1;
+        updateTurnDisplay();
+
+        const buttons = document.querySelectorAll('#options-grid button');
+        buttons.forEach((b, idx) => {
+            if (!b.classList.contains('bg-red-600')) {
+                b.disabled = false;
+                b.className = "w-full bg-purple-950/40 border border-purple-500/30 text-purple-200 font-bold p-4 rounded-xl shadow text-right transition duration-150 flex items-center justify-between group active:scale-[0.98]";
+            }
         });
-        reviewList.innerHTML = html;
+
+        if (initialTime > 0) {
+            currentTimerValue = Math.max(10, Math.floor(initialTime / 2));
+            resetTimerWithCustomTime(currentTimerValue);
+        }
     }
 
-    function toggleReview() {
-        const list = document.getElementById('review-list');
-        list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    function resetTimerWithCustomTime(customSeconds) {
+        if (countdownTimer) clearInterval(countdownTimer);
+        document.getElementById('q-timer').style.display = 'inline-block';
+        currentTimerValue = customSeconds;
+        document.getElementById('q-timer').innerText = currentTimerValue;
+
+        countdownTimer = setInterval(() => {
+            currentTimerValue--;
+            document.getElementById('q-timer').innerText = currentTimerValue;
+            if (currentTimerValue <= 0) {
+                clearInterval(countdownTimer);
+                handleTimeOut();
+            }
+        }, 1000);
     }
 
-    function switchScreen(id) { 
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen')); 
-        document.getElementById(id).classList.add('active-screen'); 
+    function handleTimeOut() {
+        playChimeSound('down');
+        const panel = document.getElementById('feedback-panel');
+        const feedbackMsg = document.getElementById('feedback-msg');
+        
+        const buttons = document.querySelectorAll('#options-grid button');
+        buttons.forEach(b => b.disabled = true);
+        
+        if (buttons[currentCorrectIndex]) {
+            buttons[currentCorrectIndex].className = "w-full bg-emerald-600/90 text-slate-950 font-black p-4 rounded-xl shadow text-right transition duration-150 flex items-center justify-between";
+        }
+
+        panel.className = "p-4 rounded-xl text-center font-bold border bg-amber-500/10 border-amber-500/30 text-amber-300";
+        feedbackMsg.innerText = `⏱️ انتهى وقت الإجابة لهذا السؤال!`;
+        panel.classList.remove('hidden');
+
+        document.getElementById('next-btn').classList.remove('hidden');
+        document.getElementById('steal-btn').classList.add('hidden');
+    }
+
+    function nextQuestion() {
+        playChimeSound('click');
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex >= gameQuestions.length) {
+            showWinnerScreen();
+        } else {
+            turn = originalTurn === 1 ? 2 : 1;
+            loadQuestion();
+        }
+    }
+
+    function updateScoresUI() {
+        document.getElementById('t1-score').innerText = scores.team1;
+        document.getElementById('t2-score').innerText = scores.team2;
+    }
+
+    function updateTurnDisplay() {
+        const activeName = turn === 1 ? teamNames.team1 : teamNames.team2;
+        document.getElementById('turn-announcement').innerText = `دور: ${activeName}`;
+
+        if (turn === 1) {
+            document.getElementById('t1-card').className = "bg-blue-900/50 border-2 border-blue-500 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden glow-active scale-105";
+            document.getElementById('t2-card').className = "bg-slate-900/40 border-2 border-slate-700/50 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden opacity-60";
+            document.getElementById('t1-turn-indicator').classList.remove('hidden');
+            document.getElementById('t2-turn-indicator').classList.add('hidden');
+        } else {
+            document.getElementById('t2-card').className = "bg-red-900/50 border-2 border-red-500 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden glow-active scale-105";
+            document.getElementById('t1-card').className = "bg-slate-900/40 border-2 border-slate-700/50 p-4 rounded-2xl text-center transition-all duration-300 relative overflow-hidden opacity-60";
+            document.getElementById('t2-turn-indicator').classList.remove('hidden');
+            document.getElementById('t1-turn-indicator').classList.add('hidden');
+        }
+    }
+
+    let confettiInterval = null;
+    function startConfettiEffect() {
+        const canvas = document.getElementById('confetti-canvas');
+        canvas.classList.remove('hidden');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ef4444', '#ec4899', '#8b5cf6'];
+        const particles = [];
+
+        for (let i = 0; i < 150; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height - height,
+                r: Math.random() * 6 + 4,
+                d: Math.random() * height,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                tilt: Math.random() * 10 - 5,
+                tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+                tiltAngle: 0
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach((p, idx) => {
+                p.tiltAngle += p.tiltAngleIncremental;
+                p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                p.x += Math.sin(p.tiltAngle);
+                p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
+
+                if (p.y > height) {
+                    particles[idx] = {
+                        x: Math.random() * width,
+                        y: -20,
+                        r: p.r,
+                        d: p.d,
+                        color: p.color,
+                        tilt: p.tilt,
+                        tiltAngleIncremental: p.tiltAngleIncremental,
+                        tiltAngle: p.tiltAngle
+                    };
+                }
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                ctx.stroke();
+            });
+        }
+
+        confettiInterval = setInterval(draw, 24);
+    }
+
+    function stopConfettiEffect() {
+        if (confettiInterval) clearInterval(confettiInterval);
+        const canvas = document.getElementById('confetti-canvas');
+        canvas.classList.add('hidden');
+    }
+
+    function showWinnerScreen() {
+        if (countdownTimer) clearInterval(countdownTimer);
+        playChimeSound('victory');
+
+        document.getElementById('play-screen').classList.add('hidden');
+        document.getElementById('winner-screen').classList.remove('hidden');
+
+        let winnerName = "";
+        let winnerPoints = 0;
+        let loserPoints = 0;
+
+        if (scores.team1 > scores.team2) {
+            winnerName = `🏆 ${teamNames.team1} 🏆`;
+            winnerPoints = scores.team1;
+            loserPoints = scores.team2;
+            document.getElementById('winner-team-name').className = "text-2xl font-black text-blue-400";
+        } else if (scores.team2 > scores.team1) {
+            winnerName = `🏆 ${teamNames.team2} 🏆`;
+            winnerPoints = scores.team2;
+            loserPoints = scores.team1;
+            document.getElementById('winner-team-name').className = "text-2xl font-black text-red-400";
+        } else {
+            winnerName = "🤝 تعادل مشرف لكلا الفريقين! 🤝";
+            winnerPoints = scores.team1;
+            loserPoints = scores.team2;
+            document.getElementById('winner-team-name').className = "text-2xl font-black text-amber-400";
+        }
+
+        document.getElementById('winner-team-name').innerText = winnerName;
+        document.getElementById('winner-points').innerText = `${winnerPoints} نقطة`;
+        document.getElementById('loser-points').innerText = `${loserPoints} نقطة`;
+
+        startConfettiEffect();
+    }
+
+    function restartGame() {
+        stopConfettiEffect();
+        document.getElementById('winner-screen').classList.add('hidden');
+        document.getElementById('setup-screen').classList.remove('hidden');
     }
 </script>
 </body>
 </html>
-
-
