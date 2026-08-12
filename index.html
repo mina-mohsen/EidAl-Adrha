@@ -69,7 +69,7 @@
         <!-- شاشة الإعداد والبدء (Setup Screen) -->
         <div id="setup-screen" class="my-auto space-y-8 py-6">
             <p class="text-center text-slate-300 text-lg sm:text-2xl max-w-4xl mx-auto leading-relaxed font-semibold">
-                مرحباً بكم في مسابقة تفاعلية شيقة عن أم النور السيدة العذراء مريم! اختاروا الفرق والقسم وابدأوا التحدي بحجم عريض للشاشة.
+                مرحباً بكم في مسابقة تفاعلية شيقة عن أم النور السيدة العذراء مريم! اختاروا الفرق والقسم وابدأوا التحدي.
             </p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -179,12 +179,9 @@
                 <p id="ref-msg" class="text-base sm:text-xl text-amber-400 font-bold"></p>
             </div>
 
-            <!-- أزرار العمليات والتنقل -->
+            <!-- أزرار العمليات والتنقل (تم تعديل الزر ليكون السؤال التالي فقط بدون سرقة) -->
             <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                <button id="steal-btn" onclick="triggerSteal()" class="hidden flex-1 bg-purple-600 hover:bg-purple-500 text-white font-black text-xl sm:text-2xl py-5 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
-                    ⚡ محاولة سرقة السؤال (لالفريق المنافس)
-                </button>
-                <button id="next-btn" onclick="nextQuestion()" class="hidden flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xl sm:text-3xl py-5 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xl sm:text-3xl py-5 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
                     السؤال التالي ➡️
                 </button>
             </div>
@@ -319,14 +316,12 @@
         let gameQuestions = [];
         let currentQuestionIndex = 0;
         let turn = 1; 
-        let originalTurn = 1; 
         let scores = { team1: 0, team2: 0 };
         let teamNames = { team1: "", team2: "" };
         let teamEmojis = { team1: "🕊️", team2: "👑" };
         let countdownTimer = null;
         let initialTime = 30; 
         let currentTimerValue = 30;
-        let stealActive = false;
         let currentCorrectIndex = -1;
         let sfxSynth = null;
         let isMuted = true;
@@ -497,7 +492,6 @@
             const shuffledOptions = [...questionObj.options];
             const correctText = shuffledOptions[questionObj.correct];
             
-            // Fisher-Yates Shuffle لخلط أماكن الاختيارات
             for (let i = shuffledOptions.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
@@ -538,15 +532,12 @@
             const finalCount = parseInt(selectedCount, 10);
             const selectedRaw = sourcePool.slice(0, Math.min(finalCount, sourcePool.length));
             
-            // خلط ترتيب الاختيارات لكل سؤال
             gameQuestions = selectedRaw.map(q => shuffleQuestionOptions(q));
 
             scores.team1 = 0;
             scores.team2 = 0;
             currentQuestionIndex = 0;
-            turn = 1; // يبدأ الفريق الأزرق دائماً في أول سؤال
-            originalTurn = turn;
-            stealActive = false;
+            turn = 1;
 
             document.getElementById('t1-display-name').innerText = teamNames.team1;
             document.getElementById('t2-display-name').innerText = teamNames.team2;
@@ -565,13 +556,10 @@
         }
 
         function loadQuestion() {
-            stealActive = false;
             isBgmTemporarilyPaused = false; 
-            document.getElementById('steal-btn').classList.add('hidden');
             document.getElementById('next-btn').classList.add('hidden');
             document.getElementById('feedback-panel').classList.add('hidden');
             
-            originalTurn = turn;
             updateTurnDisplay();
 
             const currentQuestion = gameQuestions[currentQuestionIndex];
@@ -589,7 +577,6 @@
                 document.getElementById('question-source').innerText = "القسم الثالث: الألقاب والأعياد والتسابيح 📜";
             }
 
-            // إنشاء زرار الاختيارات بخطوط عريضة جداً وكبيرة وملونة
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
             currentQuestion.options.forEach((opt, idx) => {
@@ -660,19 +647,18 @@
 
             const activeTeamName = turn === 1 ? teamNames.team1 : teamNames.team2;
 
-            // إظهار السبب أو المرجع دائماً سواء الإجابة صحيحة أو خاطئة
             refMsg.innerText = currentQuestion.ref ? `المرجع / السبب: ${currentQuestion.ref}` : "";
 
             if (selectedIndex === currentCorrectIndex) {
                 playChimeSound('up');
                 clickedBtn.className = "option-btn w-full bg-emerald-600 text-slate-950 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-xl sm:text-3xl lg:text-4xl border-b-8 border-emerald-800 min-h-[90px]";
                 
-                let pointsGained = stealActive ? 5 : 10;
+                let pointsGained = 10;
                 if (turn === 1) scores.team1 += pointsGained;
                 else scores.team2 += pointsGained;
 
                 panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-emerald-500/10 border-emerald-500/40 text-emerald-300 text-xl sm:text-2xl shadow-2xl space-y-2";
-                feedbackMsg.innerText = `✅ إجابة صحيحة وممتازة لـ ${activeTeamName}! (+${pointsGained} نقطة)`;
+                feedbackMsg.innerText = `✅ إجابة صحيحة وممتازة لـ ${activeTeamName}! (+${pointsGained} نقاط)`;
                 
                 panel.classList.remove('hidden');
                 document.getElementById('next-btn').classList.remove('hidden');
@@ -690,62 +676,8 @@
                 feedbackMsg.innerText = `❌ إجابة خاطئة من ${activeTeamName}! الإجابة الصحيحة هي: (${currentQuestion.options[currentCorrectIndex]})`;
                 panel.classList.remove('hidden');
 
-                if (!stealActive) {
-                    stealActive = true;
-                    document.getElementById('steal-btn').classList.remove('hidden');
-                    document.getElementById('next-btn').classList.remove('hidden');
-                } else {
-                    document.getElementById('next-btn').classList.remove('hidden');
-                }
+                document.getElementById('next-btn').classList.remove('hidden');
             }
-        }
-
-        function triggerSteal() {
-            playChimeSound('click');
-            document.getElementById('steal-btn').classList.add('hidden');
-            document.getElementById('feedback-panel').classList.add('hidden');
-
-            turn = turn === 1 ? 2 : 1;
-            updateTurnDisplay();
-
-            const buttons = document.querySelectorAll('#options-grid button');
-            buttons.forEach((b) => {
-                if (!b.classList.contains('bg-red-600')) {
-                    b.disabled = false;
-                    b.className = "option-btn w-full bg-purple-950/60 border-2 border-purple-500/50 text-purple-200 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition-all duration-150 flex items-center justify-between group active:scale-[0.98] text-xl sm:text-3xl lg:text-4xl min-h-[90px]";
-                }
-            });
-
-            if (initialTime > 0) {
-                currentTimerValue = Math.max(10, Math.floor(initialTime / 2));
-                resetTimerWithCustomTime(currentTimerValue);
-            }
-        }
-
-        function resetTimerWithCustomTime(customSeconds) {
-            if (countdownTimer) clearInterval(countdownTimer);
-            isBgmTemporarilyPaused = false; 
-            const ring = document.getElementById('timer-ring-container');
-            ring.style.display = 'flex';
-            currentTimerValue = customSeconds;
-            document.getElementById('q-timer').innerText = currentTimerValue;
-            ring.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-900 border-4 border-purple-500 flex items-center justify-center relative transition-all duration-350 text-purple-400 timer-glow shrink-0";
-
-            countdownTimer = setInterval(() => {
-                currentTimerValue--;
-                document.getElementById('q-timer').innerText = currentTimerValue;
-                
-                if (currentTimerValue <= 10 && currentTimerValue > 0) {
-                    isBgmTemporarilyPaused = true;
-                    playTickSound(currentTimerValue);
-                }
-
-                if (currentTimerValue <= 0) {
-                    clearInterval(countdownTimer);
-                    isBgmTemporarilyPaused = false; 
-                    handleTimeOut();
-                }
-            }, 1000);
         }
 
         function handleTimeOut() {
@@ -768,7 +700,6 @@
             panel.classList.remove('hidden');
 
             document.getElementById('next-btn').classList.remove('hidden');
-            document.getElementById('steal-btn').classList.add('hidden');
         }
 
         function nextQuestion() {
@@ -778,7 +709,7 @@
             if (currentQuestionIndex >= gameQuestions.length) {
                 showWinnerScreen();
             } else {
-                turn = originalTurn === 1 ? 2 : 1;
+                turn = turn === 1 ? 2 : 1;
                 loadQuestion();
             }
         }
