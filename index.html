@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🏆 مسابقة عيد الرسل 🏆</title>
+    <title>🏆 مسابقة عيد السيدة العذراء مريم 🏆</title>
     <!-- Tailwind CSS لجماليات وتجاوب الواجهة -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tone.js للمؤثرات والموسيقى التفاعلية الحماسية -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    <!-- Google Fonts - خط مرئي رائع ومتناسق -->
+    <!-- Google Fonts - خط مرئي رائع ومتناسق للعرض الكلي -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
@@ -17,96 +17,102 @@
             background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
         }
         .timer-glow {
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
         }
         .glow-active {
-            box-shadow: 0 0 35px rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.6);
+        }
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-btn:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 overflow-x-hidden">
+<body class="text-slate-100 min-h-screen flex flex-col items-center justify-center p-2 sm:p-6 overflow-x-hidden">
 
     <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 hidden"></canvas>
 
-    <!-- واجهة الإعلان والطلب الصوتي الذكي للتوافق مع شروط المتصفحات -->
+    <!-- واجهة الإعلان والطلب الصوتي الذكي -->
     <div id="audio-banner" class="fixed top-4 left-4 right-4 md:left-auto md:right-4 bg-amber-500 text-slate-950 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 z-50 shadow-2xl border-2 border-amber-300 font-bold transition-all duration-300">
         <div class="flex items-center gap-3">
-            <span class="text-2xl">🔊</span>
-            <span class="text-sm sm:text-base text-right">للاستمتاع بالموسيقى الحماسية والنبضية والمؤثرات، يُرجى تفعيل الصوت!</span>
+            <span class="text-3xl">🔊</span>
+            <span class="text-base sm:text-lg text-right">للاستمتاع بالموسيقى الحماسية والمؤثرات، يُرجى تفعيل الصوت!</span>
         </div>
-        <button onclick="initAudio()" class="bg-slate-950 text-amber-400 hover:bg-slate-900 px-6 py-2 rounded-xl text-sm font-black transition-all shadow-md active:scale-95">
+        <button onclick="initAudio()" class="bg-slate-950 text-amber-400 hover:bg-slate-900 px-6 py-3 rounded-xl text-base font-black transition-all shadow-md active:scale-95">
             تفعيل الصوت 🎵
         </button>
     </div>
 
-    <!-- الحاوية الأساسية العريضة لتقديم عرض رائع ومثالي للبروجيكتور واللاب توب -->
-    <div class="w-full max-w-6xl bg-slate-950/60 border border-slate-800 backdrop-blur-md rounded-3xl p-6 sm:p-10 shadow-3xl flex flex-col relative transition-all duration-300">
+    <!-- الحاوية الأساسية العملاقة لشاشات العرض والبروجيكتور -->
+    <div id="main-card-container" class="w-full max-w-7xl min-h-[92vh] bg-slate-950/75 border border-slate-800 backdrop-blur-xl rounded-3xl p-4 sm:p-8 md:p-10 shadow-3xl flex flex-col justify-between relative transition-all duration-300">
         
         <!-- زر كتم الصوت والتحكم بالملء التلقائي للشاشة الكبيرة -->
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-800/80">
             <div class="flex items-center gap-3">
-                <span class="text-3xl sm:text-4xl">🏆</span>
-                <h1 class="text-2xl sm:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200">
-                    مسابقة عيد الرسل
+                <span class="text-3xl sm:text-5xl">👑</span>
+                <h1 class="text-2xl sm:text-4xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-amber-100">
+                    مسابقة عيد السيدة العذراء مريم
                 </h1>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="toggleFullscreen()" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-md">
-                    🖥️ شاشة كاملة
+                <button onclick="toggleFullscreen()" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white px-5 py-2.5 rounded-xl text-base font-bold transition-all shadow-md flex items-center gap-2">
+                    <span>🖥️</span> <span>شاشة كاملة</span>
                 </button>
-                <button id="bgm-control-btn" onclick="toggleBgm()" class="hidden bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-md">
+                <button id="bgm-control-btn" onclick="toggleBgm()" class="hidden bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white px-5 py-2.5 rounded-xl text-base font-bold transition-all shadow-md">
                     🎵 كتم الموسيقى
                 </button>
             </div>
         </div>
 
         <!-- شاشة الإعداد والبدء (Setup Screen) -->
-        <div id="setup-screen" class="space-y-8">
-            <p class="text-center text-slate-400 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
-                مرحباً بكم في مسابقة تفاعلية شيقة ومحفزة للفرق! أدخلوا أسماء الفريقين واختاروا القسم والمؤقت لبدء التحدي الحماسي والمثير.
+        <div id="setup-screen" class="my-auto space-y-8 py-6">
+            <p class="text-center text-slate-300 text-lg sm:text-2xl max-w-4xl mx-auto leading-relaxed font-semibold">
+                مرحباً بكم في مسابقة تفاعلية شيقة عن أم النور السيدة العذراء مريم! اختاروا الفرق والقسم وابدأوا التحدي بحجم عريض للشاشة.
             </p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- إعداد الفريق الأول -->
-                <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 space-y-4">
+                <div class="bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-4">
                     <div class="flex items-center justify-between">
-                        <label class="text-blue-400 font-bold text-lg">فريق أزرق (رقم 1)</label>
-                        <span id="team1-icon-preview" class="text-3xl bg-slate-950 p-2 rounded-xl border border-slate-800 w-12 h-12 flex items-center justify-center">🎻</span>
+                        <label class="text-blue-400 font-black text-xl sm:text-2xl">فريق أزرق (رقم 1)</label>
+                        <span id="team1-icon-preview" class="text-4xl bg-slate-950 p-2 rounded-2xl border border-slate-800 w-16 h-16 flex items-center justify-center">🕊️</span>
                     </div>
-                    <input type="text" id="team1-name" value="فريق قيثارة الروح" oninput="updateTeamIcons()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-4 py-3 font-bold focus:border-blue-500 focus:outline-none transition-all">
+                    <input type="text" id="team1-name" value="فريق حمامة الذهب" oninput="updateTeamIcons()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-2xl px-5 py-4 text-xl font-bold focus:border-blue-500 focus:outline-none transition-all">
                 </div>
 
                 <!-- إعداد الفريق الثاني -->
-                <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 space-y-4">
+                <div class="bg-slate-900/80 p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-4">
                     <div class="flex items-center justify-between">
-                        <label class="text-red-400 font-bold text-lg">فريق أحمر (رقم 2)</label>
-                        <span id="team2-icon-preview" class="text-3xl bg-slate-950 p-2 rounded-xl border border-slate-800 w-12 h-12 flex items-center justify-center">🛡️</span>
+                        <label class="text-red-400 font-black text-xl sm:text-2xl">فريق أحمر (رقم 2)</label>
+                        <span id="team2-icon-preview" class="text-4xl bg-slate-950 p-2 rounded-2xl border border-slate-800 w-16 h-16 flex items-center justify-center">👑</span>
                     </div>
-                    <input type="text" id="team2-name" value="فريق سفراء المسيح" oninput="updateTeamIcons()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-4 py-3 font-bold focus:border-red-500 focus:outline-none transition-all">
+                    <input type="text" id="team2-name" value="فريق الملكة العذراء" oninput="updateTeamIcons()" class="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-2xl px-5 py-4 text-xl font-bold focus:border-red-500 focus:outline-none transition-all">
                 </div>
             </div>
 
             <!-- إعدادات المسابقة والأقسام -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-slate-900/40 p-6 rounded-2xl border border-slate-800">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 bg-slate-900/60 p-6 rounded-3xl border border-slate-800">
                 <div class="space-y-2">
-                    <label class="block text-slate-400 font-bold text-sm">اختر قسم المسابقة (30 سؤالاً):</label>
-                    <select id="epistle-select" class="w-full bg-slate-950 border border-slate-800 text-amber-400 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-amber-500">
-                        <option value="part1">القسم الأول: بطرس وبولس 📜</option>
-                        <option value="part2">القسم الثاني: أعمال الرسل (1-12) 📜</option>
-                        <option value="part3">القسم الثالث: أعمال الرسل (13-28) 📜</option>
+                    <label class="block text-slate-300 font-bold text-base sm:text-lg">قسم المسابقة (30 سؤالاً):</label>
+                    <select id="epistle-select" class="w-full bg-slate-950 border border-slate-800 text-amber-400 rounded-2xl px-4 py-4 text-lg font-bold focus:outline-none focus:border-amber-500">
+                        <option value="part1">القسم الأول: حياة العذراء ورموزها 📜</option>
+                        <option value="part2">القسم الثاني: الصوم والعيد وصعود الجسد 📜</option>
+                        <option value="part3">القسم الثالث: الألقاب والأعياد والتسابيح 📜</option>
                     </select>
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-slate-400 font-bold text-sm">عدد الأسئلة بالجولة:</label>
-                    <select id="q-count-select" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-slate-500">
+                    <label class="block text-slate-300 font-bold text-base sm:text-lg">عدد الأسئلة بالجولة:</label>
+                    <select id="q-count-select" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-2xl px-4 py-4 text-lg font-bold focus:outline-none focus:border-slate-500">
                         <option value="30">30 سؤالاً (الكامل)</option>
                         <option value="20">20 سؤالاً</option>
                         <option value="10">10 أسئلة (سريع)</option>
                     </select>
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-slate-400 font-bold text-sm">مؤقت السؤال:</label>
-                    <select id="timer-select" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-4 py-3 font-bold focus:outline-none focus:border-slate-500">
+                    <label class="block text-slate-300 font-bold text-base sm:text-lg">مؤقت السؤال:</label>
+                    <select id="timer-select" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-2xl px-4 py-4 text-lg font-bold focus:outline-none focus:border-slate-500">
                         <option value="30">30 ثانية</option>
                         <option value="45">45 ثانية</option>
                         <option value="60">60 ثانية</option>
@@ -115,95 +121,95 @@
                 </div>
             </div>
 
-            <button onclick="startGame()" class="w-full bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-950 font-black text-xl py-5 rounded-2xl transition-all duration-150 transform active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3">
-                <span>ابدأ المعركة الحماسية الآن</span>
-                <span class="text-2xl">🔥</span>
+            <button onclick="startGame()" class="w-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-400 hover:from-amber-500 hover:to-amber-300 text-slate-950 font-black text-2xl py-6 rounded-2xl transition-all duration-150 transform active:scale-[0.98] shadow-2xl flex items-center justify-center gap-4">
+                <span>ابدأ المسابقة الآن</span>
+                <span class="text-3xl">✨</span>
             </button>
         </div>
 
-        <!-- شاشة اللعب النشطة (Play Screen) -->
-        <div id="play-screen" class="hidden space-y-8">
+        <!-- شاشة اللعب النشطة - مجهزة بخطوط كبيرة جداً وملء العرض -->
+        <div id="play-screen" class="hidden flex-col justify-between space-y-6 my-auto py-2">
             
-            <!-- أوراق نقاط وأدوار الفرق التنافسية -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- أوراق نقاط وأدوار الفرق -->
+            <div class="grid grid-cols-2 gap-4 sm:gap-8">
                 <!-- كرت الفريق الأول -->
-                <div id="t1-card" class="bg-slate-900/40 border border-slate-800 p-5 rounded-2xl text-center transition-all duration-300 relative overflow-hidden">
-                    <div id="t1-turn-indicator" class="absolute top-2 right-2 bg-blue-500 text-xs px-2 py-1 rounded-md text-white font-black uppercase tracking-wider hidden">صاحب الدور</div>
-                    <span id="t1-icon-display" class="text-4xl block mb-2">🎻</span>
-                    <h3 id="t1-display-name" class="text-xl sm:text-2xl font-black text-blue-400">فريق قيثارة الروح</h3>
-                    <div class="text-4xl sm:text-5xl font-black mt-2 text-slate-100" id="t1-score">0</div>
+                <div id="t1-card" class="bg-slate-900/60 border-2 border-slate-800 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center">
+                    <div id="t1-turn-indicator" class="absolute top-2 right-2 bg-blue-500 text-xs sm:text-sm px-3 py-1 rounded-lg text-white font-black uppercase tracking-wider hidden">صاحب الدور</div>
+                    <span id="t1-icon-display" class="text-4xl sm:text-5xl block mb-1">🕊️</span>
+                    <h3 id="t1-display-name" class="text-lg sm:text-3xl font-black text-blue-400">فريق حمامة الذهب</h3>
+                    <div class="text-4xl sm:text-6xl font-black mt-1 text-slate-100" id="t1-score">0</div>
                 </div>
 
                 <!-- كرت الفريق الثاني -->
-                <div id="t2-card" class="bg-slate-900/40 border border-slate-800 p-5 rounded-2xl text-center transition-all duration-300 relative overflow-hidden">
-                    <div id="t2-turn-indicator" class="absolute top-2 right-2 bg-red-500 text-xs px-2 py-1 rounded-md text-white font-black uppercase tracking-wider hidden">صاحب الدور</div>
-                    <span id="t2-icon-display" class="text-4xl block mb-2">🛡️</span>
-                    <h3 id="t2-display-name" class="text-xl sm:text-2xl font-black text-red-400">فريق سفراء المسيح</h3>
-                    <div class="text-4xl sm:text-5xl font-black mt-2 text-slate-100" id="t2-score">0</div>
+                <div id="t2-card" class="bg-slate-900/60 border-2 border-slate-800 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center">
+                    <div id="t2-turn-indicator" class="absolute top-2 right-2 bg-red-500 text-xs sm:text-sm px-3 py-1 rounded-lg text-white font-black uppercase tracking-wider hidden">صاحب الدور</div>
+                    <span id="t2-icon-display" class="text-4xl sm:text-5xl block mb-1">👑</span>
+                    <h3 id="t2-display-name" class="text-lg sm:text-3xl font-black text-red-400">فريق الملكة العذراء</h3>
+                    <div class="text-4xl sm:text-6xl font-black mt-1 text-slate-100" id="t2-score">0</div>
                 </div>
             </div>
 
-            <!-- إعلان الدور الحالي والمؤقت العملاق للتوجيه للشاشة الكبيرة -->
-            <div class="flex flex-col items-center justify-center bg-slate-900/40 p-6 rounded-3xl border border-slate-800 space-y-4">
-                <div id="turn-announcement" class="text-2xl sm:text-3xl font-black text-amber-400 tracking-wide text-center"></div>
+            <!-- إعلان الدور والمؤقت الكبيرة -->
+            <div class="flex items-center justify-between bg-slate-900/60 px-6 py-4 rounded-3xl border border-slate-800/80 gap-4">
+                <div id="turn-announcement" class="text-xl sm:text-3xl lg:text-4xl font-black text-amber-400 tracking-wide text-right"></div>
                 
-                <!-- العداد الزمني العملاق في منتصف الشاشة لمشاهدة واضحة ومثيرة جداً -->
-                <div id="timer-ring-container" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-emerald-500 flex items-center justify-center relative transition-all duration-300 text-emerald-400 timer-glow">
-                    <span id="q-timer" class="text-4xl sm:text-5xl font-black">30</span>
+                <!-- العداد الزمني العملاق -->
+                <div id="timer-ring-container" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-900 border-4 border-emerald-500 flex items-center justify-center relative transition-all duration-300 text-emerald-400 timer-glow shrink-0">
+                    <span id="q-timer" class="text-3xl sm:text-5xl font-black">30</span>
                 </div>
             </div>
 
-            <!-- السؤال الفعلي ومصدره -->
-            <div class="bg-slate-900/80 p-6 sm:p-8 rounded-2xl border border-slate-800 space-y-4 text-center">
-                <div class="flex items-center justify-between text-slate-500 text-xs sm:text-sm font-bold">
+            <!-- منطقة السؤال العملاقة -->
+            <div class="bg-gradient-to-b from-slate-900/90 to-slate-950 p-6 sm:p-10 rounded-3xl border-2 border-amber-500/30 space-y-4 text-center shadow-2xl">
+                <div class="flex items-center justify-between text-amber-400 text-sm sm:text-xl font-black border-b border-slate-800/80 pb-3">
                     <span id="question-source">القسم الأول 📜</span>
-                    <span id="progress-text">1/30</span>
+                    <span id="progress-text" class="bg-amber-500/20 px-4 py-1 rounded-full text-amber-300">1/30</span>
                 </div>
-                <h2 id="question-text" class="text-xl sm:text-3xl font-black leading-snug text-slate-100 text-right md:text-center"></h2>
+                <!-- خط كبير جداً لمطالعة السؤال بوضوح تام على الشاشات الكبيرة -->
+                <h2 id="question-text" class="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight sm:leading-snug text-slate-100 text-center py-2"></h2>
             </div>
 
-            <!-- شبكة الاختيارات التفاعلية المتباعدة -->
-            <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- تولد ديناميكياً لتوفير التفاعل الفوري -->
+            <!-- شبكة الاختيارات الكبيرة والمريحة للرؤية -->
+            <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             </div>
 
-            <!-- لوحة التقييم الراجعة للأجوبة والمرجع الكتابي -->
-            <div id="feedback-panel" class="hidden p-5 rounded-2xl text-center font-black border-2 text-lg">
+            <!-- لوحة التقييم والمرجع -->
+            <div id="feedback-panel" class="hidden p-6 rounded-3xl text-center font-black border-2 text-xl sm:text-2xl space-y-2 shadow-2xl">
                 <p id="feedback-msg"></p>
-                <p id="ref-msg" class="text-xs sm:text-sm text-amber-500 font-bold mt-2"></p>
+                <p id="ref-msg" class="text-base sm:text-xl text-amber-400 font-bold"></p>
             </div>
 
-            <!-- أزرار العمليات والتحكم للفرق -->
-            <div class="flex flex-col sm:flex-row gap-4">
-                <button id="steal-btn" onclick="triggerSteal()" class="hidden flex-1 bg-purple-600 hover:bg-purple-500 text-white font-black text-lg py-4 rounded-xl transition duration-150 transform active:scale-95 shadow-lg">
-                    ⚡ محاولة سرقة السؤال (للفريق المنافس)
+            <!-- أزرار العمليات والتنقل -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                <button id="steal-btn" onclick="triggerSteal()" class="hidden flex-1 bg-purple-600 hover:bg-purple-500 text-white font-black text-xl sm:text-2xl py-5 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
+                    ⚡ محاولة سرقة السؤال (لالفريق المنافس)
                 </button>
-                <button id="next-btn" onclick="nextQuestion()" class="hidden flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-lg py-4 rounded-xl transition duration-150 transform active:scale-95 shadow-lg">
+                <button id="next-btn" onclick="nextQuestion()" class="hidden flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xl sm:text-3xl py-5 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
                     السؤال التالي ➡️
                 </button>
             </div>
         </div>
 
         <!-- شاشة إعلان البطل والفائز (Winner Screen) -->
-        <div id="winner-screen" class="hidden text-center space-y-8 py-10">
+        <div id="winner-screen" class="hidden text-center space-y-8 py-10 my-auto">
             <div class="space-y-4">
                 <span id="winner-screen-crown" class="text-8xl sm:text-9xl block animate-bounce">👑</span>
-                <h2 class="text-3xl sm:text-5xl font-black text-amber-400">بطل المسابقة اليوم!</h2>
-                <div id="winner-team-name" class="text-2xl sm:text-4xl font-black text-white"></div>
+                <h2 class="text-4xl sm:text-6xl font-black text-amber-400">بطل المسابقة اليوم!</h2>
+                <div id="winner-team-name" class="text-3xl sm:text-5xl font-black text-white"></div>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
+            <div class="grid grid-cols-2 gap-6 max-w-xl mx-auto bg-slate-900/80 p-8 rounded-3xl border border-slate-800 shadow-2xl">
                 <div>
-                    <span class="block text-xs sm:text-sm text-slate-500 font-bold uppercase">الدرجة الفائزة</span>
-                    <span id="winner-points" class="text-2xl sm:text-3xl font-black text-emerald-400">0 نقطة</span>
+                    <span class="block text-sm sm:text-lg text-slate-400 font-bold uppercase">الدرجة الفائزة</span>
+                    <span id="winner-points" class="text-3xl sm:text-5xl font-black text-emerald-400">0 نقطة</span>
                 </div>
                 <div>
-                    <span class="block text-xs sm:text-sm text-slate-500 font-bold uppercase">الدرجة المقابلة</span>
-                    <span id="loser-points" class="text-2xl sm:text-3xl font-black text-slate-400">0 نقطة</span>
+                    <span class="block text-sm sm:text-lg text-slate-400 font-bold uppercase">الدرجة المقابلة</span>
+                    <span id="loser-points" class="text-3xl sm:text-5xl font-black text-slate-400">0 نقطة</span>
                 </div>
             </div>
 
-            <button onclick="restartGame()" class="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-950 font-black text-lg sm:text-xl px-12 py-5 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
+            <button onclick="restartGame()" class="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-400 hover:from-amber-500 hover:to-amber-300 text-slate-950 font-black text-2xl sm:text-3xl px-14 py-6 rounded-3xl transition duration-150 transform active:scale-95 shadow-2xl">
                 إعادة اللعب وتحدي جديد 🔄
             </button>
         </div>
@@ -213,110 +219,110 @@
     <script>
         const questionsDatabase = {
             part1: [
-                { q: "من أي سبط كان بولس الرسول؟", options: ["بنيامين", "يهوذا", "لاوي", "رأوبين"], correct: 0, ref: "فل 3: 5" },
-                { q: "ما معنى اسم بولس الرسول؟", options: ["الحازم", "الضعيف", "الصغير", "الممجد"], correct: 2, ref: "المعنى اللغوي اللاتيني" },
-                { q: "في أي مدينة رُجم بولس الرسول حتى ظنوا أنه مات؟", options: ["مالطة", "أفسس", "أنطاكية", "لسترة"], correct: 3, ref: "أع 14: 19" },
-                { q: "من هو الوالي الذي ارتعب عندما تحدث بولس الرسول عن الدينونة؟", options: ["فستوس", "فيلكس", "أغريباس", "غاليون"], correct: 1, ref: "أع 24: 25" },
-                { q: "من الذي لم يوافق بولس الرسول على ختانه؟", options: ["تيموثاوس", "تيطس", "مرقس", "لوقا"], correct: 1, ref: "غل 2: 3" },
-                { q: "أين مُنع بولس الرسول من الكرازة أولاً بالروح القدس؟", options: ["آسيا", "مقدونية", "روما", "أورشليم"], correct: 0, ref: "أع 16: 6" },
-                { q: "كم مرة ذكر سفر الأعمال قصة اهتداء بولس الرسول؟", options: ["مرة واحدة", "مرتين", "ثلاث مرات", "أربع مرات"], correct: 2, ref: "أع 9، أع 22، أع 26" },
-                { q: "ما هي المدينة التي صنع فيها بولس الرسول الخيام مع أكيلا وبريسكلا؟", options: ["تسالونيكي", "لسترة", "أفسس", "كورنثوس"], correct: 3, ref: "أع 18: 1-3" },
-                { q: "كم مرة انكسرت السفينة ببولس الرسول؟", options: ["مرة واحدة", "مرتين", "ثلاث مرات", "أربع مرات"], correct: 2, ref: "2 كو 11: 25" },
-                { q: "ما اسم الساحر الذي وبخه بولس وأصابه بالعمى؟", options: ["سيمون", "يمبريس", "ينيس", "باريشوع"], correct: 3, ref: "أع 13: 6-11" },
-                { q: "من هو الوالي الذي حاكم بولس في كورنثوس؟", options: ["غاليون", "فيلكس", "فستوس", "سرجيوس بولس"], correct: 0, ref: "أع 18: 12" },
-                { q: "أين كتب بولس الرسول: أكملت السعي، حفظت الإيمان؟", options: ["الرسالة الأولى لكورنثوس", "الرسالة الثانية لتيموثاوس", "الرسالة إلى كولوسي", "الرسالة إلى العبرانيين"], correct: 1, ref: "2 تي 4: 7" },
-                { q: "أين ولد بطرس الرسول؟", options: ["بيت صيدا", "أورشليم", "الجليل", "كفرناحوم"], correct: 0, ref: "يو 1: 44" },
-                { q: "في أي سنة تقريباً استشهد القديس بطرس الرسول؟", options: ["63 م", "67 م", "70 م", "80 م"], correct: 1, ref: "التقليد الكنسي والآباء" },
-                { q: "ماذا أُطلق على بطرس وأندراوس؟", options: ["ابني زبدي", "ابني يونا", "ابني رعد", "لا إجابة مما سبق"], correct: 1, ref: "يو 1: 42" },
-                { q: "أي من الأماكن المذكورة لم يبشر فيها القديس بطرس الرسول？", options: ["أنطاكية", "بنتس", "بلاد فارس", "فلسطين"], correct: 2, ref: "1 بط 1: 1" },
-                { q: "في كم إنجيل ذُكرت قصة مشي بطرس على المياه؟", options: ["إنجيل واحد", "إنجيلين", "ثلاثة أناجيل", "أربعة أناجيل"], correct: 0, ref: "مت 14: 28-31 فقط" },
-                { q: "كتب بطرس الرسول رسائله للمتغربين في.....؟", options: ["رومية", "مقدونية", "قيصرية", "آسيا الصغرى"], correct: 3, ref: "1 بط 1: 1" },
-                { q: "قال السيد المسيح: 'أنت بطرس وعلى هذه الصخرة أبني كنيستي'.. رداً على قول بطرس:", options: ["ها نحن قد تركنا كل شيء وتبعناك", "أنت هو المسيح ابن الله الحي", "ولو اضطررت أن أموت معك لا أنكرك", "يارب أنت تعلم أني أحبك"], correct: 1, ref: "مت 16: 16" },
-                { q: "كم مرة ذُكرت حماة بطرس في الأناجيل الأربعة؟", options: ["مرة واحدة", "مرتين", "ثلاث مرات", "أربع مرات"], correct: 2, ref: "مت 8، مر 1، لو 4" },
-                { q: "كم عدد أصحاحات رسالة بطرس الأولى والثانية على التوالي؟", options: ["6 و 2", "4 و 3", "5 و 3", "1 و 4"], correct: 2, ref: "العهد الجديد" },
-                { q: "قاد بطرس مجموعة مكونة من ....... لاختيار من يحل مكان يهوذا الإسخريوطي.", options: ["20 شخصاً", "160 شخصاً", "120 شخصاً", "100 شخص"], correct: 2, ref: "أع 1: 15" },
-                { q: "كتبت رسالة بطرس الأولى بيد الأخ الأمين....", options: ["أرخبس", "أرتيماس", "سلوانس", "أبلوس"], correct: 2, ref: "1 بط 5: 12" },
-                { q: "في أي مدينة رأى بطرس رؤيا الملاءة النازلة من السماء؟", options: ["أورشليم", "يافا", "أنطاكية", "دمشق"], correct: 1, ref: "أع 10: 9-16" },
-                { q: "ما اسم تلميذ بولس المفضل والابن الصريح في الإيمان الذي وجه له رسالتين؟", options: ["تيطس", "تيموثاوس", "لوقا", "سيلا"], correct: 1, ref: "1 تي 1: 2" },
-                { q: "أين استشهد القديس بولس الرسول مقطوع الرأس؟", options: ["أورشليم", "أفسس", "روما", "الإسكندرية"], correct: 2, ref: "التقليد الكنسي" },
-                { q: "من هو السجان الذي آمن وعمد هو وأهل بيته بعد زلزال سجن فيلبي؟", options: ["سجان فيلبي", "سجان أفسس", "سجان قيصرية", "سجان روما"], correct: 0, ref: "أع 16: 33" },
-                { q: "ما هو اللقب الشهير الذي لُقّب به القديس بولس الرسول لعمله التبشيري الكبير؟", options: ["رسول الأمم", "حبيب الرب", "الإنجيلي البار", "ابن الرعد"], correct: 0, ref: "رو 11: 13" },
-                { q: "أين ألقى بولس الرسول خطابه الشهير لفلاسفة اليونان الأبيقوريين والرواقيين؟", options: ["المعبد الكبير", "الأريوس باغوس", "المجمع اليهودي", "مسرح أفسس"], correct: 1, ref: "أع 17: 19" },
-                { q: "ما اسم زوجة حنانيا التي كذبت مع زوجها وماتت أمام بطرس الرسول؟", options: ["طابيثا", "lيديا", "سفيرة", "بريسكلا"], correct: 2, ref: "أع 5: 1" }
+                { q: "ما اسم والدي السيدة العذراء مريم؟", options: ["يواكيم وحنة", "زكريا وأليصابات", "إبراهيم وسارة", "عمرام ويواكيم"], correct: 0, ref: "التقليد الكنسي" },
+                { q: "كم كان عمر السيدة العذراء مريم عندما قُدِّمت للهيكل؟", options: ["3 سنوات", "5 سنوات", "7 سنوات", "12 سنة"], correct: 0, ref: "التقليد الكنسي" },
+                { q: "أي سبط تنتمي إليه السيدة العذراء مريم؟", options: ["سبط يهوذا", "سبط لاوي", "سبط بنيامين", "سبط أفرايم"], correct: 0, ref: "لو 1: 32" },
+                { q: "من هو الملاك الذي بشر العذراء مريم بالميلاد العجيب؟", options: ["الملاك غبريال (جبرائيل)", "الملاك ميخائيل", "الملاك روفائيل", "الملاك سوريال"], correct: 0, ref: "لو 1: 26" },
+                { q: "ما هي المدينة التي كانت تقطنها العذراء مريم عند البشارة؟", options: ["الناصرة", "بيت لحم", "أورشليم", "أريحا"], correct: 0, ref: "لو 1: 26" },
+                { q: "ما هو الرمز في العهد القديم الذي يشير لعذراوية مريم بعد الميلاد (العليقة)؟", options: ["عليقة موسى المشتعلة بالنار ولم تحترق", "تابوت العهد", "عصا هارون", "سلم يعقوب"], correct: 0, ref: "خر 3: 2" },
+                { q: "ما الرمز الذي يشير للعذراء مريم لحملها المن السماوي (يسوع المسيح)؟", options: ["قسط المن", "شجرة الحياة", "برج داود", "تابوت النجاة"], correct: 0, ref: "عب 9: 4" },
+                { q: "من هي قريبة العذراء مريم التي زارتها وعزمت المكوث عندها 3 أشهر؟", options: ["أليصابات", "سالومي", "حنة النبية", "مريم زوجة كلوبا"], correct: 0, ref: "لو 1: 36-56" },
+                { q: "ما اسم التسبحة الشهيرة التي ترنمت بها العذراء عند زيارة أليصابات؟", options: ["تعظم نفسي الرب", "تسبحة الشكر", "تسبحة بصلوات العذراء", "مزمور الراعي"], correct: 0, ref: "لو 1: 46" },
+                { q: "أين ولدت السيدة العذراء طفلها يسوع؟", options: ["بيت لحم", "الناصرة", "أورشليم", "مصر"], correct: 0, ref: "لو 2: 4-7" },
+                { q: "كم يوماً قضتها العائلة المقدسة في الهروب إلى أرض مصر كرمز للمأوى والملجأ؟", options: ["حوالي 3 سنوات وبضعة أشهر", "سنة واحدة", "7 سنوات", "40 يوماً"], correct: 0, ref: "التقليد الكنسي والسنكسار" },
+                { q: "ما اسم الشراكة والمحبة بين العذراء ويوحنا الرسول عند الصليب؟", options: ["سلمها المسيح ليوحنا لتكون أمه", "ذهبت معه إلى أفسس مباشرة", "عاشت في بيت بطرس", "سافرت إلى روما"], correct: 0, ref: "يو 19: 26-27" },
+                { q: "ما هي أول معجزة صُرّح بها للرب يسوع بطلب وحس العذراء مريم؟", options: ["تحويل الماء إلى خمر في قانا الجليل", "شفاء المخلع", "إقامة لعازر", "إشباع الخمسة آلاف"], correct: 0, ref: "يو 2: 1-11" },
+                { q: "ما المقولة الذهبية الأخيرة للعذراء مريم المسجلة في الإنجيل؟", options: ["مهما قال لكم فافعلوه", "تعظم نفسي الرب", "هوذا أنا أمة الرب", "جميع الأجيال تطوبني"], correct: 0, ref: "يو 2: 5" },
+                { q: "ما الرمز في العهد القديم الذي يمثل العذراء كجسر يربط بين السماء والأرض؟", options: ["سلم يعقوب", "باب الهيكل المغلق", "عصا هارون", "شجرة الزيتون"], correct: 0, ref: "تك 28: 12" },
+                { q: "ما رمز العذراء مريم التي أزهرت وأثمرت بغير غرس ولا سقاية؟", options: ["عصا هارون التي أفرخت", "كرِمة يوسف", "عليقة موسى", "حقل يزرع"], correct: 0, ref: "عد 17: 8" },
+                { q: "في أي سفر وردت النبوة: 'هوذا العذراء تحبل وتلد ابناً وتدعو اسمه عمانوئيل'؟", options: ["سفر أشعياء", "سفر إرميا", "سفر حزقيال", "سفر دانيال"], correct: 0, ref: "أش 7: 14" },
+                { q: "ما الرمز الذي أشار به حزقيال النبي لعذراوية مريم الدائمة؟", options: ["الباب المغلق نحو الشرق", "التابوت الذهبي", "الهيكل العظيم", "المنارة الذهبية"], correct: 0, ref: "حز 44: 2" },
+                { q: "ماذا يقدم في القداس القبطي كرمز لطهارة وبخور الصلوات المقبولة المنسوبة للعذراء؟", options: ["المجمرة (الشورية) الذهب", "الشموع", "قسط المن", "لوح الشريعة"], correct: 0, ref: "الطقس الكنسي" },
+                { q: "كم كان عمر العذراء مريم تقريباً عندما نالت نعمة البشارة؟", options: ["14 - 16 سنة", "20 سنة", "10 سنوات", "25 سنة"], correct: 0, ref: "التقليد الكنسي" },
+                { q: "أي نبي قال: 'قامت الملكة عن يمينك بأثواب ذهب أوفير' كرمز للعذراء؟", options: ["داود النبي", "سليمان الحكيم", "أشعياء النبي", "دانيال النبي"], correct: 0, ref: "مز 45: 9" },
+                { q: "ما معنى اسم 'مريم' في اللغة الأصلية القديمة؟", options: ["المرتفعة / السامية / بحر المرار", "الزهرة البيضاء", "نور السماء", "الحمامة الحسناء"], correct: 0, ref: "القواميس الكتابية" },
+                { q: "من هو الشيخ البار الذي حُمل على يديه الطفل يسوع ونطق بنبوة لآلام العذراء؟", options: ["سمعان الشيخ", "زكريا الكاهن", "يوسف النجار", "متياس البار"], correct: 0, ref: "لو 2: 34-35" },
+                { q: "ما الآية التي قالها سمعان الشيخ للعذراء مريم عن آلام مشاركتها للصليب؟", options: ["وأنت أيضاً يمر في نفسك سيف", "مباركة أنت في النساء", "تفرح روحك بالرب", "تكونين أم الشعوب"], correct: 0, ref: "لو 2: 35" },
+                { q: "أين اختبأت العائلة المقدسة والعذراء مريم في أسيوط بمصر؟", options: ["دير المحرق بجبل قسقام", "دير درنكة", "كنيسة زويلة", "كنيسة المعادي"], correct: 0, ref: "التقليد القبطي الأصيل" },
+                { q: "ماذا كانت العذراء مريم تفعل عندما كان يسوع ينمو في القامة والحكمة؟", options: ["كانت تحفظ جميع هذه الأمور في قلبها", "تكرز في المدن", "تكتب المذكرات", "تخدم في الهيكل"], correct: 0, ref: "لو 2: 51" },
+                { q: "ما الرمز الذي يمثل العذراء مريم كحاملة للنور الحقيقي للعالم؟", options: ["المنارة الذهبية", "مذبح البخور", "مائدة خبز الوجوه", "الغطاء الروحي"], correct: 0, ref: "الطقس الكنسي" },
+                { q: "كم سنة عاشتها العذراء مريم على الأرض حسب التقليد الكنسي؟", options: ["حوالي 60 سنة", "50 سنة", "70 سنة", "80 سنة"], correct: 0, ref: "التقليد الكنسي والسنكسار" },
+                { q: "ما اسم النبي الذي تنبأ عن هروب العذراء مع طفلها إلى مصر: 'من مصر دعوت ابني'؟", options: ["هوشع النبي", "ميخا النبي", "ملاخي النبي", "عاموس النبي"], correct: 0, ref: "هو 11: 1 / مت 2: 15" },
+                { q: "من هو الخطيب البار الذي اؤتمن على حراسة ورعاية العذراء مريم؟", options: ["القديس يوسف النجار", "القديس زكريا", "القديس نيقوديموس", "القديس يوسف الرامي"], correct: 0, ref: "مت 1: 19" }
             ],
             part2: [
-                { q: "من حل محل يهوذا الإسخريوطي في درجة الرسولية؟", options: ["متياس", "يوسف بارسابا", "برنابا", "لوقا"], correct: 0, ref: "أع 1: 26" },
-                { q: "في أي يوم حل الروح القدس على التلاميذ المجتمعين بنفس واحدة؟", options: ["عيد الفصح", "عيد العنصرة (الخمسين)", "عيد المظال", "عيد الأبواق"], correct: 1, ref: "أع 2: 1" },
-                { q: "ما اسم التلميذ الذي شفاه بطرس ويوحنا عند باب الهيكل الذي يقال له الجميل؟", options: ["رجل أعرج منذ بطن أمه", "رجل أعمى", "رجل أصم أبكم", "رجل أبرص"], correct: 0, ref: "أع 3: 2" },
-                { q: "أين كان يجتمع التلاميذ للتعليم والصلاة داخل هيكل أورشليم؟", options: ["رواق سليمان", "الدار الخارجية للأمم", "قدس الأقداس", "الباب الذهبي"], correct: 0, ref: "أع 3: 11" },
-                { q: "ما اسم الرجل الذي كذب على الروح القدس بخصوص ثمن الحقل ومات بغتة؟", options: ["حنانيا", "سفيرة", "غايس", "نيقولاوس"], correct: 0, ref: "أع 5: 1-5" },
-                { q: "من هو الفريسي ومعلم الناموس الشهير الذي نصح مجمع اليهود بترك التلاميذ وشأنهم؟", options: ["غمالائيل", "قيافا", "حنان", "شاول"], correct: 0, ref: "أع 5: 34" },
-                { q: "كم كان عدد الرجال المشهود لهم الذين اختيروا لخدمة الموائد (الشمامسة)؟", options: ["3 شيوخ", "7 شمامسة", "12 رسولاً", "70 تلميذاً"], correct: 1, ref: "أع 6: 3" },
-                { q: "من هو أول شهيد في المسيحية رُجم وهو يرى السماء مفتوحة وابن الإنسان عن يمين الله؟", options: ["إستيفانوس", "فيلبس", "يعقوب", "يوحنا"], correct: 0, ref: "أع 7: 59" },
-                { q: "من هو الشماس الذي ذهب إلى السامرة وبشر وعمّد الخصي الحبشي؟", options: ["فيلبس الشماس", "إستيفانوس", "تيمون", "نيكانور"], correct: 0, ref: "أع 8" },
-                { q: "ماذا كان يعمل الخصي الحبشي الذي وعظه وعمده فيلبس؟", options: ["وزير مالية للملكة كنداكة", "قائد جيش حبشي", "رئيس كهنة السامرة", "حاكم إقليم نوبي"], correct: 0, ref: "أع 8: 27" },
-                { q: "إلى أي مدينة كان شاول منطلقاً باضطهاد مرير عندما برق حوله نور من السماء؟", options: ["دمشق", "أورشليم", "أنطاكية", "يافا"], correct: 0, ref: "أع 9: 3" },
-                { q: "من هو التلميذ الذي أرسله الرب في دمشق ليضع يده على شاول لكي يبصر ويمتلئ من الروح القدس؟", options: ["حنانيا دمشق", "بطرس", "سيلا", "برنابا"], correct: 0, ref: "أع 9: 10" },
-                { q: "ما هو اسم المدينة التي هرب منها شاول مدلى في زنبيل (سل) من السور ليلاً؟", options: ["دمشق", "طرسوس", "أفسس", "لسترة"], correct: 0, ref: "أع 9: 25" },
-                { q: "ما اسم المرأة التقية الصالحة التي أقامها بطرس من الموت في يافا？", options: ["طابيثا (غزالة)", "مريم", "lيديا", "بريسكلا"], correct: 0, ref: "أع 9: 36" },
-                { q: "من هو قائد المئة الروماني التقي من الكتيبة الإيطالية الذي آمن وعمده بطرس الرسول؟", options: ["كورنيليوس", "يوليوس", "لوكيوس", "غاليون"], correct: 0, ref: "أع 10: 1" },
-                { q: "أين دعي التلاميذ 'مسيحيين' أول مرة في التاريخ؟", options: ["أورشليم", "أنطاكية", "دمشق", "روما"], correct: 1, ref: "أع 11: 26" },
-                { q: "من هو الرسول الذي قتله هيرودس أغريباس الأول بالسيف في أورشليم؟", options: ["يعقوب بن زبدي أخو يوحنا", "يعقوب بن حلفى", "بطرس", "يوحنا"], correct: 0, ref: "أع 12: 2" },
-                { q: "كيف نجا بطرس الرسول من سجن هيرودس المشدد والحراس الـ 16؟", options: ["أخرجه ملاك الرب فك قيوده", "زلزال شديد هدم السجن", "هرب بمساعدة رودا", "عفا عنه هيرودس في العيد"], correct: 0, ref: "أع 12: 7" },
-                { q: "إلى بيت من ذهب بطرس الرسول بعد نجاته العجائبية من السجن مباشرة؟", options: ["مريم أم يوحنا الملقب مرقس", "lيديا بائعة الأرجوان", "كورنيليوس قائد المئة", "حنانيا التلميذ"], correct: 0, ref: "أع 12: 12" },
-                { q: "ما اسم الجارية التي خرجت لتستمع لصوت بطرس عند الباب الخارجي؟", options: ["رودا", "سفيرة", "طابيثا", "دمريس"], correct: 0, ref: "أع 12: 13" },
-                { q: "كيف مات الملك هيرودس الذي اضطهد الكنيسة في سفر الأعمال؟", options: ["ضربه ملاك الرب فصار يأكله الدود ومات", "مات مقتولاً في معركة", "أصيب بالجنون وانتحر", "مات بمرض الكوليرا"], correct: 0, ref: "أع 12: 23" },
-                { q: "من رافق برنابا من أورشليم حاملاً الصدقات لإعانة الإخوة؟", options: ["شاول (بولس)", "تيموثاوس", "تيطس", "لوقا"], correct: 0, ref: "أع 11: 30" },
-                { q: "ما اسم الجبل الذي صعد منه السيد المسيح إلى السماء أمام أنظار الرسل؟", options: ["جبل الزيتون", "جبل التجلي", "جبل سيناء", "جبل صهيون"], correct: 0, ref: "أع 1: 12" },
-                { q: "كم كان عدد الرسل والتلاميذ المجتمعين للصلاة في العلية قبل الخمسين؟", options: ["نحو 120 شخصاً", "نحو 500 شخص", "نحو 70 شخصاً", "نحو 3000 شخص"], correct: 0, ref: "أع 1: 15" },
-                { q: "بأي لغات تكلم التلاميذ وتكلم بها بطرس يوم الخمسين؟", options: ["بألسنة ولغات الأمم الحاضرة", "بالعبرية فقط", "باليونانية فقط", "باللاتينية الفصحى"], correct: 0, ref: "أع 2: 4" },
-                { q: "كم نفساً اعتمدت بعد عظة بطرس التفسيرية الرائعة يوم الخمسين؟", options: ["نحو 3000 نفس", "نحو 5000 نفس", "نحو 120 نفس", "نحو 7000 نفس"], correct: 0, ref: "أع 2: 41" },
-                { q: "من هو اللاوي القبرصي السخي الذي باع حقله ووضع ماله عند أرجل الرسل ولقب بـ 'ابن الوعظ'؟", options: ["يوسف برنابا", "حنانيا الكاذب", "كريسبس الكورنثي", "غايس"], correct: 0, ref: "أع 4: 36" },
-                { q: "ما هي المعجزة الأولى المسجلة لبطرس الرسول بعد حلول الروح القدس؟", options: ["إقامة الأعرج عند باب الجميل", "إقامة طابيثا من الموت", "شفاء المشلول إنياس", "إخراج الشياطين بالظل"], correct: 0, ref: "أع 3: 6" },
-                { q: "أين حُبس بطرس ويوحنا للمرة الأولى بسبب تبشيرهما بالقيامة من الأموات؟", options: ["في أورشليم بدار الكهنة", "في سجن قيصرية", "في سجن روما", "في السامرة لدى الوالي"], correct: 0, ref: "أع 4: 3" },
-                { q: "ما اسم المشلول الذي شفاه القديس بطرس في مدينة اللد بعد أن ظل فراشه 8 سنوات؟", options: ["إنياس", "إستيفانوس", "سيمون", "يوليوس"], correct: 0, ref: "أع 9: 33" }
+                { q: "كم يوماً يصوم الأقباط في صوم السيدة العذراء مريم؟", options: ["15 يوماً", "21 يوماً", "40 يوماً", "55 يوماً"], correct: 0, ref: "الطقس الكنسي" },
+                { q: "متى يبدأ ومتى ينتهي صوم العذراء مريم بحسب التقويم القبطي؟", options: ["من 1 إلى 16 مسرى (7 إلى 22 أغسطس)", "من 1 إلى 15 أبيب", "من 15 طوبة إلى 1 مسرى", "طوال شهر كيهك"], correct: 0, ref: "التقويم القبطي الكنسي" },
+                { q: "ما هي درجة الصوم المبارك للعدراء من حيث درجة التنسك؟", options: ["من أصوام الدرجة الثانية (يؤكل فيه السمك)", "صوم انقطاعي مطلق بدون زيت", "صوم من الدرجة الأولى فقط", "صوم بدون ماء"], correct: 0, ref: "طقس الأصوام الكنسية" },
+                { q: "ما اسم الرسول الذي لم يحضر نياحة العذراء ورأى جسدها الطاهر صاعداً للسماء؟", options: ["توما الرسول", "بطرس الرسول", "يوحنا الرسول", "بولس الرسول"], correct: 0, ref: "السنكسار والتقليد الكنسي" },
+                { q: "ماذا أخذ القديس توما الرسول كبركة ودليل على صعود جسد العذراء مريم؟", options: ["زنار (حزام) العذراء", "ثوبها الأبيض", "صليبها الخشبي", "أيقونتها المكتوبة"], correct: 0, ref: "التقليد الكنسي القبطي" },
+                { q: "ما السحابة التي حملت توما الرسول وهو قادم من الهند وشاهد صعود الجسد؟", options: ["سحابة نورانية", "سفينة بحرية", "مركبة ملائكية", "مركبة نارية"], correct: 0, ref: "السنكسار القبطي (16 مسرى)" },
+                { q: "ماذا طلب الرسل من الرب بعد أن أخبرهم توما برؤية صعود جسد العذراء؟", options: ["صاموا 15 يوماً لكي يروا الجسد", "صاموا 40 يوماً", "سافروا إلى الهند", "قاموا بفتح القبر فوراً"], correct: 0, ref: "كتاب السنكسار" },
+                { q: "أين كان قبر السيدة العذراء مريم الذي وُضع فيه جسدها قبل صعوده؟", options: ["جثمانية (الجسمانية)", "بيت لحم", "الناصرة", "جبل الزيتون"], correct: 0, ref: "التقليد الكنسي التاريخي" },
+                { q: "ما العيد الذي تحتفل به الكنيسة يوم 16 مسرى (22 أغسطس)؟", options: ["عيد صعود جسد السيدة العذراء", "عيد نياحة العذراء", "عيد ميلاد العذراء", "عيد دخولها الهيكل"], correct: 0, ref: "السنكسار القبطي" },
+                { q: "في أي يوم تحتفل الكنيسة بنياحة (وفاة) السيدة العذراء مريم؟", options: ["21 طوبة", "16 مسرى", "1 بشنس", "21 بؤونة"], correct: 0, ref: "السنكسار القبطي" },
+                { q: "ما المعجزة الشهيرة للعذراء في حل الحديد وإطلاق سراح متياس الرسول؟", options: ["ذوبان الحديد في مدينة المرتفعات (برتباس)", "انكسار أبواب سجن روما", "فتح سجن أورشليم", "هروب الرسل من فيلبي"], correct: 0, ref: "كتاب ميامر العذراء" },
+                { q: "في أي عام مائي/ميلادي حدث التجلي التاريخي الشهير للعدراء بالزيتون؟", options: ["2 أبريل 1968 م", "1954 م", "1973 م", "1981 م"], correct: 0, ref: "التاريخ الكنسي الحديث" },
+                { q: "في عهد أي بابا من بابوات الإسكندرية حدث ظهور العذراء مريم بكنيسة الزيتون؟", options: ["البابا كيرلس السادس", "البابا شنودة الثالث", "البابا كيرلس الخامس", "البابا يوساب الثاني"], correct: 0, ref: "التاريخ الكنسي المعاصر" },
+                { q: "ما هي الظواهر الروحية المصاحبة لظهور العذراء فوق قباب كنيسة الزيتون؟", options: ["ظهور حمام نوراني وبخور ورعد ناعم", "هطول الأمطار", "ظهور نجوم ساطعة فقط", "أصوات أبواق قوية"], correct: 0, ref: "توثيق ظهورات الزيتون" },
+                { q: "ما هي الكنيسة الأثرية الشهيرة في مصر التي شهدت تجلي العذراء عام 2000 م؟", options: ["كنيسة العذراء بالوراق", "كنيسة مسرة", "كنيسة المعادي", "كنيسة المستجده"], correct: 0, ref: "التاريخ الكنسي الحديث" },
+                { q: "ما المعجزة العظيمة للعذراء مريم في عهد الخليفة المعز لدين الله الفاطمي والبابا أبراآم؟", options: ["نقل جبل المقطم", "بناء كاتدرائية", "شفاء ابن الخليفة", "فيضان النيل"], correct: 0, ref: "التاريخ القبطي - القرن 10" },
+                { q: "من هو القديس العابد الصباغ الذي اختارته العذراء ليصلي لنقل جبل المقطم؟", options: ["سمعان الخراز", "مارجرجس", "الأنبا روشدي", "القديس بيشوي"], correct: 0, ref: "السنكسار القبطي" },
+                { q: "ماذا كانت تطلب العذراء مريم دائماً في ظهوراتها ومعجزاتها من الشعب؟", options: ["الصلاة والصوم والتوبة والرجوع لله", "تقديم الصدقات المالية", "زيارة الأماكن المقدسة فقط", "الصمت التام"], correct: 0, ref: "رسائل الظهورات الكنسية" },
+                { q: "ما الاسم الطقسي للشهر الذي يسبق عيد الميلاد والمخصص لتسابيح العذراء (شهر الكياك)؟", options: ["الشهر المريمي (كيهك)", "شهر التسبحة الأغسطسي", "شهر النيروز", "شهر البرامون"], correct: 0, ref: "الطقس الكنسي القبطي" },
+                { q: "ما المعجزة التاريخية للعدراء في بناء أول كنيسة على اسمها في مدينة فيليبي؟", options: ["تجميع الأحكام وباركت الأساسات", "نزول حجر من السماء", "رسم الخريطة في المنام", "إضاءة المكان بنور ناري"], correct: 0, ref: "ميامر العذراء والسنكسار" },
+                { q: "ما العيد القبطي الذي تحتفل فيه الكنيسة بتكريس أول كنيسة على اسم العذراء بفيليبي؟", options: ["21 بؤونة", "16 مسرى", "21 طوبة", "16 التوت"], correct: 0, ref: "السنكسار القبطي" },
+                { q: "أي من هذه الألقاب أطلق على العذراء مريم لمساعدتها وإغاثتها الدائمة للجميع؟", options: ["سريعة النداء / حالة الحديد", "السور المنيع", "فخر الجنس البشري", "جميع ما سبق"], correct: 0, ref: "الكتب والتسابيح الكنسية" },
+                { q: "ما السفر الإنجيلي الذي ذكر باستفاضة أحداث بشارة العذراء وتسبحتها؟", options: ["إنجيل لوقا", "إنجيل متى", "إنجيل مرقس", "إنجيل يوحنا"], correct: 0, ref: "لوقا الأصحاح الأول" },
+                { q: "ما اسم المكان الذي استقرت فيه العائلة المقدسة في المعادي قبل الاستقلال بالمراكب؟", options: ["كنيسة العذراء بالمعادي (العدوية)", "مسرة", "الزيتون", "مسطرد"], correct: 0, ref: "محطات رحلة العائلة المقدسة" },
+                { q: "ما البئر الشهير الذي حمّمت فيه العذراء طفلها يسوع وأخرجت منه ماءً عذباً؟", options: ["المحمّة بمسطرد", "بئر عين شمس", "بئر المحرق", "بئر وادي النطرون"], correct: 0, ref: "التقليد القبطي" },
+                { q: "ماذا يسمى المظاهر الاحتفالية الشعبية والروحية في صوم العذراء بمصر؟", options: ["النهضات المريمية والدورة بالأيقونة", "المهرجانات الصيفية", "المجامع الكنسية", "اللقاءات العشائرية"], correct: 0, ref: "التراث القبطي" },
+                { q: "كم يوماً صام الرسل حتى استجاب الله وأراهم جسد العذراء صاعداً؟", options: ["15 يوماً", "7 أيام", "3 أيام", "21 يوماً"], correct: 0, ref: "السنكسار (قصة صوم العذراء)" },
+                { q: "ما اللقب الذي يُطلق على دير العذراء جبل درنكة بأسيوط لتوافق زيارتها له؟", options: ["محطة ختام رحلة العائلة المقدسة بالصعيد", "أول كنيسة في العالم", "دير الآباء السواح", "مأوى القديسين"], correct: 0, ref: "التاريخ القبطي" },
+                { q: "ما الشجرة الشهيرة في عين شمس بالقاهرة التي استظلت تحتها العذراء مريم؟", options: ["شجرة مريم", "شجرة العليقة", "شجرة البلسم", "شجرة الكافور"], correct: 0, ref: "المزارات السياحية والدينية بمصر" },
+                { q: "لماذا يُقبل الملايين على صوم العذراء مريم بشغف ومحبة شديدة؟", options: ["لمكانتها الفائقة ومحبتهم وشفاعتها القوية", "لأنه صوم خفيف", "لأنه في فصل الصيف", "لأنه فرض كنسي صارم فقط"], correct: 0, ref: "المفهوم الروحي القبطي" }
             ],
             part3: [
-                { q: "من هما الشخصان اللذان أفرزهما الروح القدس للخدمة في الرحلة التبشيرية الأولى؟", options: ["برنابا وشاول", "بطرس ويوحنا", "بولس وسيلا", "بولس ولوقا"], correct: 0, ref: "أع 13: 2" },
-                { q: "أين بدأت الرحلة التبشيرية الأولى ومن أي جزيرة أبحر برنابا وشاول؟", options: ["من مدينة أنطاكية وجزيرة قبرص", "من مدينة أنطاكية وجزيرة كريت", "من مدينة أنطاكية و جزيرة مالطة", "من مدينة أنطاكية وجزيرة صقلية"], correct: 0, ref: "أع 13: 4" },
-                { q: "ما اسم الوالي الروماني الذكي في بافوس الذي آمن بعد رؤية معجزة ضرب الساحر بالعمى؟", options: ["سرجيوس بولس", "فيلكس الوالي", "فستوس الوالي", "غاليون الوالي"], correct: 0, ref: "أع 13: 7" },
-                { q: "من هو التلميذ الذي فارق بولس وبرنابا ورجع إلى أورشليم أثناء الرحلة الأولى？", options: ["يوحنا الملقب مرقس", "لوقا الطبيب", "تيموثاوس الشاب", "تيطس"], correct: 0, ref: "أع 13: 13" },
-                { q: "في أي مدينة ظن الناس أن بولس وبرنابا إلهان (هرمس وزفس) لدرجة تقديم الذبائح لهما؟", options: ["لسترة", "أنطاكية بيسيدية", "أفسس", "تسالونيكي"], correct: 0, ref: "أع 14: 8-13" },
-                { q: "ما هو القرار الرئيسي والمحوري الذي اتخذه مجمع أورشليم المسكوني الأول؟", options: ["عدم إلزام الأمم بالختان والناموس", "اختيار متياس بدلاً من يهوذا", "فرض الصيام الأربعيني", "جمع التبرعات لكنائس غلاطية"], correct: 0, ref: "أع 15" },
-                { q: "من الذي رافق بولس في رحلته التبشيرية الثانية بعد الخلاف الحاد مع برنابا بخصوص مرقس؟", options: ["سيلا (سلوانس)", "برنابا", "يوحنا مرقس", "لوقا الإنجيلي"], correct: 0, ref: "أع 15: 40" },
-                { q: "من هو التلميذ الشاب من لسترة الذي اختاره بولس ليرافقه وقام بختنه بسبب اليهود؟", options: ["تيموثاوس", "تيطس", "أبلوس", "أريستارخوس"], correct: 0, ref: "أع 16: 1-3" },
-                { q: "ما الرؤيا التي رآها بولس وتسببت في عبور الإنجيل وبدء الكرازة في قارة أوروبا؟", options: ["رجل مقدوني يطلب العبور والإعانة", "ملاءة نازلة من السماء برؤوس", "الرب يسوع يأمره بالذهاب لروما", "ملاك ممسك بسيف ناري"], correct: 0, ref: "أع 16: 9" },
-                { q: "من هي المرأة بائعة الأرجوان التي كانت أول مؤمنة تعتمد مع بيتها في أوروبا بمدينة فيلبي؟", options: ["ليديا", "طابيثا", "بريسكلا", "دمريس الأثينية"], correct: 0, ref: "أع 16: 14" },
-                { q: "ماذا حدث عندما كان بولس وسيلا يسبحان الله في سجن فيلبي الداخلي ليلاً؟", options: ["حدثت زلزلة عظيمة وفتحت الأبواب", "أرسل الوالي أمراً بالعفو الفوري", "انشقت الأرض وابتلعت السجان", "غاب الحراس في نوم مغناطيسي"], correct: 0, ref: "أع 16: 26" },
-                { q: "ما اسم المدينة اليونانية التي كان أهلها أشرف من الذين في تسالونيكي ويبحثون الكتب يومياً؟", options: ["بيرية", "تسالونيكي", "أثينا", "كورنثوس"], correct: 0, ref: "أع 17: 11" },
-                { q: "أين رأى بولس الرسول مذبحاً مكتوباً عليه 'لإله مجهول' وألقى خطبته التبشيرية العظيمة؟", options: ["أثينا", "كورنثوس", "روما", "أفسس"], correct: 0, ref: "أع 17: 22-23" },
-                { q: "ما اسم المرأة الأثينية التي آمنت مع ديونيسيوس الأريوباغي بعد سماع عظة بولس؟", options: ["دمريس", "lيديا", "سفيرة", "رودا"], correct: 0, ref: "أع 17: 34" },
-                { q: "من هما صانعا الخيام اللذان استضافا بولس الرسول للعمل والسكن معاً في كورنثوس؟", options: ["أكيلا وبريسكلا", "فيلكس ودروسلا", "يوليوس وكورنيليوس", "كريسبس وغايس"], correct: 0, ref: "أع 18: 2-3" },
-                { q: "ما اسم رئيس المجمع الكورنثي الذي آمن بالرب هو وجميع بيته واعتمدوا؟", options: ["كريسبس", "سوسثانيس", "غاليون", "أبلوس"], correct: 0, ref: "أع 18: 8" },
-                { q: "من هو الشاب السكندري الفصيح المقتدر في الكتب الذي خدم وعلم بنشاط في أفسس وكورنثوس؟", options: ["أبلوس", "تيموثاوس", "تيطس", "لوقا الطبيب"], correct: 0, ref: "أع 18: 24" },
-                { q: "في أي مدينة أحدث صناع تماثيل ديانا الفضية بزعامة ديمتريوس شحناً وشغباً عظيماً ضد بولس؟", options: ["أفسس", "أثينا", "روما", "أنطاكية"], correct: 0, ref: "أع 19: 23-28" },
-                { q: "ما اسم الشاب الذي غلب عليه النوم وسقط من الطبقة الثالثة ومات فأقامه بولس في ترواس؟", options: ["أفتيخوس", "تيموثاوس", "يوليوس قائد المئة", "كريسبس"], correct: 0, ref: "أع 20: 9" },
-                { q: "من هو النبي الذي تنبأ بربط بولس وتسليمه للأمم مستخدماً منطقة (حزام) بولس في قيصرية؟", options: ["أغابوس", "سيلا", "يعقوب", "فيلبس الإنجيلي"], correct: 0, ref: "أع 21: 10-11" },
-                { q: "من هو الوالي الروماني في قيصرية الذي ترك بولس مقيداً سنتين إرضاء لليهود؟", options: ["فيلكس الوالي", "فستوس الوالي", "غاليون الوالي", "أغريباس الملك"], correct: 0, ref: "أع 24: 27" },
-                { q: "لمن رفع بولس الرسول دعواه القضائية لكي يحاكم رسمياً تفادياً لمؤامرات القتل؟", options: ["قيصر (إمبراطور روما)", "الملك هيرودس", "الوالي فستوس بمفرده", "رئيس مجمع أورشليم"], correct: 0, ref: "أع 25: 11" },
-                { q: "من هو الملك الذي قال لبولس الرسول: 'بقليل تقنعني أن أصير مسيحياً'؟", options: ["أغريباس الثاني", "هيرودس الكبير", "فيلكس الوالي", "فستوس الوالي"], correct: 0, ref: "أع 26: 28" },
-                { q: "ما اسم قائد المئة الروماني اللطيف من الكتيبة الأغسطسية الذي كلف بنقل بولس إلى روما؟", options: ["يوليوس", "كورنيليوس", "غاليون الوالي", "سرجيوس بولس"], correct: 0, ref: "أع 27: 1" },
-                { q: "ما اسم الجزيرة التي لجأ إليها بولس والركاب الـ 276 بعد انكسار السفينة وعضته الأفعى فيها؟", options: ["مالطة (مليطة)", "كريت", "قبرص", "صقلية"], correct: 0, ref: "أع 28: 1" },
-                { q: "من هو مقدم جزيرة مالطة الذي استضاف بولس وشفا بولس والده من الحمى والسحج؟", options: ["بوبليوس", "يوليوس قائد المئة", "فيلكس", "غاليون"], correct: 0, ref: "أع 28: 7" },
-                { q: "كم سنة قضاها بولس الرسول في بيته المستأجر في روما يكرز بملكوت الله بلا مانع؟", options: ["سنتين", "sنة واحدة", "ثلاث سنوات", "خمس سنوات"], correct: 0, ref: "أع 28: 30" },
-                { q: "من هو كاتب سفر أعمال الرسل وهو رفيق بولس الأمين في رحلاته ومحاكماته؟", options: ["لوقا الطبيب الحبيب", "مرقس الإنجيلي", "متى العشار", "يوحنا الحبيب"], correct: 0, ref: "مقدمة سفر الأعمال" },
-                { q: "من هو التلميذ الذي رافق بولس وسجّل أحداث السجن والمحاكمات بضمير الغائب والمتكلم (نحن)؟", options: ["لوقا الإنجيلي", "تيموثاوس", "تيطس", "جميع ما سبق"], correct: 0, ref: "أع 16، أع 20، أع 27" },
-                { q: "ما هو السفر التاريخي الوحيد في العهد الجديد الذي ينتهي بوجود بولس الرسول كارزاً في روما؟", options: ["سفر أعمال الرسل", "إنجيل لوقا البشير", "رؤيا يوحنا اللاهوتي", "الرسالة إلى أهل رومية"], correct: 0, ref: "خاتمة العهد الجديد التاريخي" }
+                { q: "ما معنى اللقب اللاهوتي الشهير للعذراء مريم 'ثيوتوكوس' (Theotokos)؟", options: ["والدة الإله", "أخت الملائكة", "خادمة الرب", "السماء الثانية"], correct: 0, ref: "مجمع أفسس 431 م" },
+                { q: "في أي مجمع مسكوني تم إقرار لقب 'والدة الإله' ورسخ مقدمة قانون الإيمان؟", options: ["مجمع أفسس المسكوني", "مجمع نيقية", "مجمع القسطنطينية", "مجمع أورشليم"], correct: 0, ref: "التاريخ الكنسي (431 م)" },
+                { q: "من هو البطل والبطريرك القبطي الذي دافع عن لقب 'والدة الإله' ضد نسطور؟", options: ["القديس كيرلس الكبير (عمود الدين)", "القديس أثناسيوس الرسولي", "القديس ديسقورس", "القديس باسيليوس"], correct: 0, ref: "تاريخ المجامع الكنسية" },
+                { q: "ما اسم التسبحة واللحن الشهير الذي يقال في طقس تمجيد العذراء: 'السلام لك يا مريم..'؟", options: ["شيري نيفول (السلام لك)", "أبورو", "تويناثو", "طاي شوري"], correct: 0, ref: "الابصلمودية الكهنوتية" },
+                { q: "ما معنى كلمة 'ثيوطوكية' في كتاب التسبحة الكنسية (الأبصلمودية)؟", options: ["تمجيد وتطويب لوالدة الإله العذراء", "قصيدة طلب المغفرة", "قانون الصلاة الإلهي", "تسبحة الليل"], correct: 0, ref: "كتاب الأبصلمودية الكيهكية" },
+                { q: "كم عدد الثيوطوكيات في كتاب الأبصلمودية السنوية (بعدد أيام الأسبوع)؟", options: ["7 ثيوطوكيات", "4 ثيوطوكيات", "12 ثيوطوكية", "30 ثيوطوكية"], correct: 0, ref: "الطقس والأبصلمودية" },
+                { q: "أي ثيوطوكية تشمل القطعة الشهيرة: 'العليقة التي رآها موسى النبي في البرية'؟", options: ["ثيوطوكية الخميس", "ثيوطوكية الأحد", "ثيوطوكية الجمعة", "ثيوطوكية الاثنين"], correct: 0, ref: "الأبصلمودية السنوية" },
+                { q: "ما اللقب الذي يطلق على العذراء مريم كونها حملت المَنّ الحقيقي وجمعت المجد؟", options: ["قسط الذهب النقي", "تابوت العهد", "حمامة العلي الصالحة", "سلم يعقوب"], correct: 0, ref: "تسابيح الكنيسة" },
+                { q: "لماذا تسمى العذراء مريم بـ 'السماء الثانية' في اللاتورجية القبطية؟", options: ["لأن الرب حل في بطنها وصار داخلها", "لأنها تحب الصلاة", "لأن وجهها كالشمس", "لأنها صعدت للسماء"], correct: 0, ref: "تسابيح الثيوطوكيات" },
+                { q: "ما هو اللقب الشهير للعذراء في صلاة الساعة السادسة والجمعة العظيمة؟", options: ["أم النور والملكة الشفيعة", "باب الحياة", "كرمة دسمة", "فخر الرهبان"], correct: 0, ref: "صلوات الأجبية" },
+                { q: "ما العيد الذي تحتفل به الكنيسة يوم 1 بشنس من كل عام قبطي؟", options: ["عيد ميلاد السيدة العذراء مريم", "عيد دخولها الهيكل", "عيد النياحة", "عيد حالة الحديد"], correct: 0, ref: "التقويم القبطي" },
+                { q: "ما العيد الذي تحتفل به الكنيسة يوم 3 كيهك؟", options: ["عيد تقديم العذراء للهيكل وهي طفلة", "عيد البشارة", "عيد الميلاد", "عيد تجلي العذراء"], correct: 0, ref: "السنكسار القبطي" },
+                { q: "ما العيد القبطي الذي يوافق 29 برمهات؟", options: ["عيد البشارة بميلاد المسيح من العذراء", "عيد نياحة العذراء", "عيد صعود الجسد", "عيد زيارة أليصابات"], correct: 0, ref: "السنكسار القبطي" },
+                { q: "ما اسم التسبحة اليومية التي تحتفل بوالدة الإله في شهر كيهك المبروك؟", options: ["الهوسات والتسابيح الكيهكية (7 و 4)", "صلاة القنديل", "القداس الأغسطسي", "تسبحة نصف الليل فقط"], correct: 0, ref: "الطقس الكيهكي" },
+                { q: "ما اللقب الذي يعبر عن شفاعة العذراء مريم المقبولة والسريعة جداً؟", options: ["الشفيعة المؤتمنة والشفيعة الأكرم", "أم الرحمة", "حمامة السلام", "جميع ما سبق"], correct: 0, ref: "الكتب الكنسية" },
+                { q: "ما اللقب الذي أطلق على العذراء مريم كأم لجميع المؤمنين بالمسيح؟", options: ["أم الكنيسة وأم المؤمنين", "أم الرسل", "أم النور", "أم الحياة"], correct: 0, ref: "التعليم الكنسي" },
+                { q: "في أي لحن قبطي يقال: 'السلام للملكة، السلام لأمنا العذراء'؟", options: ["لحن آسي كيريا (أو أفراحي يا مريم)", "لحن إثبينوس", "لحن بي أويك", "لحن طاي شوري"], correct: 0, ref: "الألحان القبطية الخالدة" },
+                { q: "ما اللقب الذي نالت به العذراء تطويباً من أليصابات حين استقبلتها؟", options: ["مباركة أنت في النساء ومباركة هي ثمرة بطنك", "يا كاملة النعمة", "يا ملكة السلام", "يا حمامة الحسناء"], correct: 0, ref: "لو 1: 42" },
+                { q: "ما اللقب المأخوذ من سفر المزامير ويطلق على العذراء كمدينة الله؟", options: ["أورشليم الثانية / مدينة الله", "صهيون المباركة", "البرج العالي", "القرية المقتربة"], correct: 0, ref: "مز 87: 3" },
+                { q: "ماذا يسمى الوشاح أو الغطاء الذهبي المزين للأيقونة القبطية للعذراء مريم؟", options: ["التاج والزنار والريزة الذهبية", "البرنس", "الستر الحريري", "الحجاب الإلهي"], correct: 0, ref: "الفن الأيقوغرافي القبطي" },
+                { q: "ما هي العبارة الشهيرة التي نرددها في مقدمة قانون الإيمان إكراماً للعذراء؟", options: ["نعظمك يا أم النور الحقيقي ونمجدك أيها العذراء القديسة", "نؤمن بإله واحد", "ننتظر قيامة الأموات", "قدوس قدوس قدوس"], correct: 0, ref: "قانون الإيمان الكنسي" },
+                { q: "ما رمز العذراء مريم التي حملت الجمرة الإلهية دون أن تحترق؟", options: ["المجمرة الذهب (الشورية)", "التابوت", "المنارة", "المائة المفصالة"], correct: 0, ref: "الطقس القبطي" },
+                { q: "أي أصحاح في سفر الرؤيا يصف: 'امرأة متسربلة بالشمس والقمر تحت رجليها وعلى رأسها إكليل من 12 نجماً'؟", options: ["رؤيا أصحاح 12", "رؤيا أصحاح 7", "رؤيا أصحاح 21", "رؤيا أصحاح 4"], correct: 0, ref: "رؤ 12: 1" },
+                { q: "ما اسم الصلاة في الأجبية التي نحيي فيها العذراء مريم بسلام الملاك غبريال؟", options: ["قطع الساعة السادسة / صلاة القطع والقطع المريمية", "صلاة نصف الليل", "صلاة النوم", "صلاة الستار"], correct: 0, ref: "صلوات الأجبية" },
+                { q: "ما اللقب الذي أطلقه القديس يعقوب السروجي والقديسين على العذراء لططهارتها النادرة؟", options: ["فخر جنسنا / الحمامة النقية", "سفينة النجاة", "جنة مغلقة", "جميع ما سبق"], correct: 0, ref: "أقوال الآباء والقصائد" },
+                { q: "ما هو الحجر أو الجبل الذي قُطع بغير يدين ونما حتى ملأ الأرض كرمز لميلاد المسيح من العذراء؟", options: ["جبل دانيال (دانيال 2)", "جبل سيناء", "جبل حوريب", "جبل صهيون"], correct: 0, ref: "دا 2: 34-35" },
+                { q: "ما هي الزهرة الجميلة التي ترمز بها الكنيسة لبكورية وطهارة العذراء مريم؟", options: ["زهرة السوسن (السوسنة البيضاء)", "زهرة النرجس", "زهرة الياسمين", "الوردة الحمراء"], correct: 0, ref: "نش 2: 1-2" },
+                { q: "ما اللقب الطقسي الذي ينادي به الشماس في بداية القداس لإعلان شفاعة العذراء؟", options: ["وبالأكثر القديسة الممتلئة مجداً العذراء كل حين", "بصلوات جميع القديسين", "من أجل سلام الكنيسة", "اذكر يارب شعبك"], correct: 0, ref: "مجمع القداس الإلهي" },
+                { q: "كم يوماً تفصل بين عيد نياحة العذراء (21 طوبة) وعيد صعود جسدها (16 مسرى)؟", options: ["حوالي 7 أشهر", "3 أشهر", "40 يوماً", "سنة كاملة"], correct: 0, ref: "التقويم القبطي الكنسي" },
+                { q: "ما الجملة الشهيرة التي نرددها دائماً للتبرك بوالدة الإله في خاتمة الصلوات؟", options: ["بركة صلواتها وشفاعتها فلتكن معنا أمين", "الله يرحمنا", "بالمحبة الإلهية", "بنعمة الرب الشاملة"], correct: 0, ref: "الطقوس والطلبات القبطية" }
             ]
         };
 
         let gameQuestions = [];
         let currentQuestionIndex = 0;
-        let turn = 1; // 1 = Team 1, 2 = Team 2
+        let turn = 1; 
         let originalTurn = 1; 
         let scores = { team1: 0, team2: 0 };
         let teamNames = { team1: "", team2: "" };
-        let teamEmojis = { team1: "🎻", team2: "🛡️" };
+        let teamEmojis = { team1: "🕊️", team2: "👑" };
         let countdownTimer = null;
         let initialTime = 30; 
         let currentTimerValue = 30;
@@ -324,9 +330,8 @@
         let currentCorrectIndex = -1;
         let sfxSynth = null;
         let isMuted = true;
-        let isBgmTemporarilyPaused = false; // التحكم بموسيقى الخلفية في آخر 10 ثوانٍ
+        let isBgmTemporarilyPaused = false;
 
-        // نظام التأليف الموسيقي (Dual-Voice High-Energy Synthwave)
         let bgmBass = null;
         let bgmArp = null;
         let bgmLoop = null;
@@ -335,30 +340,22 @@
 
         function getEmojiForName(name) {
             const text = name.trim();
-            if (!text) return "🎯";
-            if (text.includes("قيثارة") || text.includes("موسيق") || text.includes("لحن") || text.includes("ترنيم")) return "🎻";
-            if (text.includes("روح") || text.includes("حمام") || text.includes("سلام") || text.includes("نقي")) return "🕊️";
-            if (text.includes("سفراء") || text.includes("رسالة") || text.includes("عالم") || text.includes("أرض")) return "🌐";
-            if (text.includes("جنود") || text.includes("جيش") || text.includes("سيف") || text.includes("حرب")) return "⚔️";
-            if (text.includes("أبطال") || text.includes("درع") || text.includes("إيمان") || text.includes("حماة") || text.includes("سفراء المسيح")) return "🛡️";
-            if (text.includes("ملك") || text.includes("تاج") || text.includes("مسيح") || text.includes("سماوي") || text.includes("ذهبي")) return "👑";
-            if (text.includes("صقر") || text.includes("نسر") || text.includes("طائر")) return "🦅";
-            if (text.includes("أسد") || text.includes("قوي") || text.includes("شجاع") || text.includes("غالب")) return "🦁";
-            if (text.includes("نجم") || text.includes("ضياء") || text.includes("نور") || text.includes("شمس")) return "⭐";
-            if (text.includes("سفينة") || text.includes("فلك") || text.includes("مركب")) return "⛵";
-            if (text.includes("صليب") || text.includes("فداء") || text.includes("كنيسة")) return "✝️";
-            return "🔥"; 
+            if (!text) return "👑";
+            if (text.includes("حمامة") || text.includes("سلام") || text.includes("روح") || text.includes("طهارة")) return "🕊️";
+            if (text.includes("ملكة") || text.includes("تاج") || text.includes("عذراء") || text.includes("أم النور")) return "👑";
+            if (text.includes("وردة") || text.includes("زهور") || text.includes("سوسنة") || text.includes("زهرة")) return "🌹";
+            if (text.includes("نور") || text.includes("شمس") || text.includes("ضياء") || text.includes("كوكبة")) return "⭐";
+            if (text.includes("منارة") || text.includes("شمعة") || text.includes("مصباح")) return "🕯️";
+            if (text.includes("سفينة") || text.includes("ميناء") || text.includes("فلك")) return "⛵";
+            if (text.includes("صليب") || text.includes("إيمان") || text.includes("كنيسة")) return "✝️";
+            return "✨"; 
         }
 
         function updateTeamIcons() {
-            // كود الحماية المطور لمنع أخطاء Null في واجهة المتصفحات قبل التحميل التام
             const input1 = document.getElementById('team1-name');
             const input2 = document.getElementById('team2-name');
             
-            if (!input1 || !input2) {
-                // مغادرة آمنة إذا كانت العناصر غير مبنية في الـ DOM بعد
-                return;
-            }
+            if (!input1 || !input2) return;
 
             const name1 = input1.value.trim();
             const name2 = input2.value.trim();
@@ -379,7 +376,6 @@
                 sfxSynth = new Tone.Synth().toDestination();
                 sfxSynth.volume.value = -3;
 
-                // خط الباس النبضي السريع (Heartbeat Driving Bass)
                 bgmBass = new Tone.MonoSynth({
                     oscillator: { type: "square" },
                     envelope: { attack: 0.01, decay: 0.08, sustain: 0.2, release: 0.15 },
@@ -387,7 +383,6 @@
                 }).toDestination();
                 bgmBass.volume.value = -22;
 
-                // لحن صاعد نشط وحماسي لألعاب التحدي والمغامرات
                 bgmArp = new Tone.Synth({
                     oscillator: { type: "triangle" },
                     envelope: { attack: 0.03, decay: 0.12, sustain: 0.5, release: 0.2 }
@@ -422,7 +417,7 @@
                 playChimeSound('up');
                 startBgm();
             } catch (e) {
-                console.warn("Delay in setting up audio context", e);
+                console.warn("Delay setting up audio context", e);
             }
         }
 
@@ -443,12 +438,12 @@
             if (isBgmMutedByChoice) {
                 isBgmMutedByChoice = false;
                 btn.innerHTML = "🎵 كتم الموسيقى";
-                btn.className = "bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-md";
+                btn.className = "bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white px-5 py-2.5 rounded-xl text-base font-bold transition-all shadow-md";
                 startBgm();
             } else {
                 isBgmMutedByChoice = true;
                 btn.innerHTML = "🔇 تشغيل الموسيقى";
-                btn.className = "bg-amber-600 hover:bg-amber-500 border border-amber-500 text-slate-950 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-md";
+                btn.className = "bg-amber-600 hover:bg-amber-500 border border-amber-500 text-slate-950 px-5 py-2.5 rounded-xl text-base font-bold transition-all shadow-md";
                 stopBgm();
             }
         }
@@ -491,7 +486,7 @@
             const elem = document.documentElement;
             if (!document.fullscreenElement) {
                 elem.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                    console.error(`Error attempting full screen mode: ${err.message}`);
                 });
             } else {
                 document.exitFullscreen();
@@ -505,8 +500,8 @@
             const input1 = document.getElementById('team1-name');
             const input2 = document.getElementById('team2-name');
 
-            teamNames.team1 = input1 ? (input1.value.trim() || "فريق قيثارة الروح") : "فريق قيثارة الروح";
-            teamNames.team2 = input2 ? (input2.value.trim() || "فريق سفراء المسيح") : "فريق سفراء المسيح";
+            teamNames.team1 = input1 ? (input1.value.trim() || "فريق حمامة الذهب") : "فريق حمامة الذهب";
+            teamNames.team2 = input2 ? (input2.value.trim() || "فريق الملكة العذراء") : "فريق الملكة العذراء";
             
             updateTeamIcons();
             
@@ -542,7 +537,9 @@
             updateScoresUI();
 
             document.getElementById('setup-screen').classList.add('hidden');
-            document.getElementById('play-screen').classList.remove('hidden');
+            const playScreen = document.getElementById('play-screen');
+            playScreen.classList.remove('hidden');
+            playScreen.classList.add('flex');
 
             loadQuestion();
         }
@@ -565,22 +562,23 @@
             
             const selectedScope = document.getElementById('epistle-select').value;
             if (selectedScope === 'part1') {
-                document.getElementById('question-source').innerText = "القسم الأول: بطرس وبولس 📜";
+                document.getElementById('question-source').innerText = "القسم الأول: حياة العذراء ورموزها 📜";
             } else if (selectedScope === 'part2') {
-                document.getElementById('question-source').innerText = "القسم الثاني: أعمال الرسل (1-12) 📜";
+                document.getElementById('question-source').innerText = "القسم الثاني: الصوم والعيد وصعود الجسد 📜";
             } else {
-                document.getElementById('question-source').innerText = "القسم الثالث: أعمال الرسل (13-28) 📜";
+                document.getElementById('question-source').innerText = "القسم الثالث: الألقاب والأعياد والتسابيح 📜";
             }
 
+            // إنشاء زرار الاختيارات بخطوط عريضة جداً وكبيرة وملونة
             const grid = document.getElementById('options-grid');
             grid.innerHTML = '';
             currentQuestion.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = "w-full bg-slate-800 border-2 border-slate-700 hover:bg-slate-700 hover:border-slate-600 text-slate-100 font-extrabold p-5 rounded-2xl shadow-xl text-right transition-all duration-150 flex items-center justify-between group active:scale-[0.98] text-lg sm:text-xl";
+                btn.className = "option-btn w-full bg-slate-900/90 border-2 border-slate-700/80 hover:bg-slate-800 hover:border-amber-400 text-slate-100 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition-all duration-150 flex items-center justify-between group active:scale-[0.98] text-xl sm:text-3xl lg:text-4xl min-h-[90px]";
                 btn.onclick = () => submitAnswer(idx, btn);
                 btn.innerHTML = `
-                    <span>${opt}</span>
-                    <span class="bg-slate-900 text-slate-400 group-hover:bg-amber-500 group-hover:text-slate-900 w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm transition-all duration-150">
+                    <span class="leading-relaxed">${opt}</span>
+                    <span class="bg-slate-950 text-slate-400 group-hover:bg-amber-400 group-hover:text-slate-950 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl transition-all duration-150 shrink-0 mr-4 border border-slate-800">
                         ${idx + 1}
                     </span>
                 `;
@@ -604,7 +602,7 @@
             currentTimerValue = initialTime;
             document.getElementById('q-timer').innerText = currentTimerValue;
             
-            ring.className = "w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-emerald-500 flex items-center justify-center relative transition-all duration-350 text-emerald-400 timer-glow";
+            ring.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-900 border-4 border-emerald-500 flex items-center justify-center relative transition-all duration-350 text-emerald-400 timer-glow shrink-0";
 
             countdownTimer = setInterval(() => {
                 currentTimerValue--;
@@ -616,9 +614,9 @@
                 }
 
                 if (currentTimerValue <= 10 && currentTimerValue > 5) {
-                    ring.className = "w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-amber-500 flex items-center justify-center relative transition-all duration-350 text-amber-400 timer-glow";
+                    ring.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-900 border-4 border-amber-500 flex items-center justify-center relative transition-all duration-350 text-amber-400 timer-glow shrink-0";
                 } else if (currentTimerValue <= 5) {
-                    ring.className = "w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-red-500 flex items-center justify-center relative transition-all duration-350 text-red-500 timer-glow animate-pulse";
+                    ring.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-900 border-4 border-red-500 flex items-center justify-center relative transition-all duration-350 text-red-500 timer-glow animate-pulse shrink-0";
                 }
 
                 if (currentTimerValue <= 0) {
@@ -644,30 +642,30 @@
 
             if (selectedIndex === currentCorrectIndex) {
                 playChimeSound('up');
-                clickedBtn.className = "w-full bg-emerald-600 text-slate-950 font-black p-5 rounded-2xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-lg sm:text-xl border-b-4 border-emerald-800";
+                clickedBtn.className = "option-btn w-full bg-emerald-600 text-slate-950 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-xl sm:text-3xl lg:text-4xl border-b-8 border-emerald-800 min-h-[90px]";
                 
                 let pointsGained = stealActive ? 5 : 10;
                 if (turn === 1) scores.team1 += pointsGained;
                 else scores.team2 += pointsGained;
 
-                panel.className = "p-5 rounded-2xl text-center font-black border-2 bg-emerald-500/10 border-emerald-500/30 text-emerald-300 text-lg";
-                feedbackMsg.innerText = `✅ إجابة صحيحة رائعة لـ ${activeTeamName}! (+${pointsGained} نقطة)`;
+                panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-emerald-500/10 border-emerald-500/40 text-emerald-300 text-xl sm:text-2xl shadow-2xl space-y-2";
+                feedbackMsg.innerText = `✅ إجابة صحيحة وممتازة لـ ${activeTeamName}! (+${pointsGained} نقطة)`;
                 
-                refMsg.innerText = currentQuestion.ref ? `المرجع الكتابي: ${currentQuestion.ref}` : "";
+                refMsg.innerText = currentQuestion.ref ? `المرجع / الملاحظة: ${currentQuestion.ref}` : "";
                 
                 panel.classList.remove('hidden');
                 document.getElementById('next-btn').classList.remove('hidden');
                 updateScoresUI();
             } else {
                 playChimeSound('down');
-                clickedBtn.className = "w-full bg-red-600 text-slate-100 font-bold p-5 rounded-2xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-lg sm:text-xl border-b-4 border-red-800";
+                clickedBtn.className = "option-btn w-full bg-red-600 text-slate-100 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-xl sm:text-3xl lg:text-4xl border-b-8 border-red-800 min-h-[90px]";
                 
                 setTimeout(() => {
                     const rightBtn = buttons[currentCorrectIndex];
-                    if (rightBtn) rightBtn.className = "w-full bg-emerald-600 text-slate-950 font-black p-5 rounded-2xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-lg sm:text-xl border-b-4 border-emerald-800";
+                    if (rightBtn) rightBtn.className = "option-btn w-full bg-emerald-600 text-slate-950 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-xl sm:text-3xl lg:text-4xl border-b-8 border-emerald-800 min-h-[90px]";
                 }, 300);
 
-                panel.className = "p-5 rounded-2xl text-center font-black border-2 bg-red-500/10 border-red-500/30 text-red-300 text-lg";
+                panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-red-500/10 border-red-500/40 text-red-300 text-xl sm:text-2xl shadow-2xl space-y-2";
                 feedbackMsg.innerText = `❌ إجابة خاطئة من ${activeTeamName}!`;
                 refMsg.innerText = "";
                 panel.classList.remove('hidden');
@@ -694,7 +692,7 @@
             buttons.forEach((b) => {
                 if (!b.classList.contains('bg-red-600')) {
                     b.disabled = false;
-                    b.className = "w-full bg-purple-950/40 border-2 border-purple-500/40 text-purple-200 font-extrabold p-5 rounded-2xl shadow-2xl text-right transition-all duration-150 flex items-center justify-between group active:scale-[0.98] text-lg sm:text-xl";
+                    b.className = "option-btn w-full bg-purple-950/60 border-2 border-purple-500/50 text-purple-200 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition-all duration-150 flex items-center justify-between group active:scale-[0.98] text-xl sm:text-3xl lg:text-4xl min-h-[90px]";
                 }
             });
 
@@ -711,7 +709,7 @@
             ring.style.display = 'flex';
             currentTimerValue = customSeconds;
             document.getElementById('q-timer').innerText = currentTimerValue;
-            ring.className = "w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-purple-500 flex items-center justify-center relative transition-all duration-350 text-purple-400 timer-glow";
+            ring.className = "w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-900 border-4 border-purple-500 flex items-center justify-center relative transition-all duration-350 text-purple-400 timer-glow shrink-0";
 
             countdownTimer = setInterval(() => {
                 currentTimerValue--;
@@ -739,11 +737,11 @@
             buttons.forEach(b => b.disabled = true);
             
             if (buttons[currentCorrectIndex]) {
-                buttons[currentCorrectIndex].className = "w-full bg-emerald-600/90 text-slate-950 font-black p-5 rounded-2xl shadow-xl text-right transition duration-150 flex items-center justify-between text-lg sm:text-xl";
+                buttons[currentCorrectIndex].className = "option-btn w-full bg-emerald-600/90 text-slate-950 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-xl sm:text-3xl lg:text-4xl min-h-[90px]";
             }
 
-            panel.className = "p-5 rounded-2xl text-center font-black border-2 bg-amber-500/10 border-amber-500/30 text-amber-300 text-lg";
-            feedbackMsg.innerText = `⏱️ انتهى وقت الإجابة الفعلي لهذا السؤال!`;
+            panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-amber-500/10 border-amber-500/40 text-amber-300 text-xl sm:text-2xl shadow-2xl";
+            feedbackMsg.innerText = `⏱️ انتهى وقت الإجابة لهذا السؤال!`;
             panel.classList.remove('hidden');
 
             document.getElementById('next-btn').classList.remove('hidden');
@@ -772,13 +770,13 @@
             document.getElementById('turn-announcement').innerText = `دور: ${activeName}`;
 
             if (turn === 1) {
-                document.getElementById('t1-card').className = "bg-blue-900/40 border-4 border-blue-500 p-6 rounded-2xl text-center transition-all duration-300 relative overflow-hidden glow-active scale-105 z-10";
-                document.getElementById('t2-card').className = "bg-slate-900/40 border-2 border-slate-800 p-5 rounded-2xl text-center transition-all duration-300 relative overflow-hidden opacity-40 scale-95";
+                document.getElementById('t1-card').className = "bg-blue-950/70 border-4 border-blue-500 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden glow-active scale-105 z-10 flex flex-col items-center justify-center";
+                document.getElementById('t2-card').className = "bg-slate-900/40 border-2 border-slate-800 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden opacity-40 scale-95 flex flex-col items-center justify-center";
                 document.getElementById('t1-turn-indicator').classList.remove('hidden');
                 document.getElementById('t2-turn-indicator').classList.add('hidden');
             } else {
-                document.getElementById('t2-card').className = "bg-red-900/40 border-4 border-red-500 p-6 rounded-2xl text-center transition-all duration-300 relative overflow-hidden glow-active scale-105 z-10";
-                document.getElementById('t1-card').className = "bg-slate-900/40 border-2 border-slate-800 p-5 rounded-2xl text-center transition-all duration-300 relative overflow-hidden opacity-40 scale-95";
+                document.getElementById('t2-card').className = "bg-red-950/70 border-4 border-red-500 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden glow-active scale-105 z-10 flex flex-col items-center justify-center";
+                document.getElementById('t1-card').className = "bg-slate-900/40 border-2 border-slate-800 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden opacity-40 scale-95 flex flex-col items-center justify-center";
                 document.getElementById('t2-turn-indicator').classList.remove('hidden');
                 document.getElementById('t1-turn-indicator').classList.add('hidden');
             }
@@ -857,7 +855,10 @@
             stopBgm(); 
             playChimeSound('victory');
 
-            document.getElementById('play-screen').classList.add('hidden');
+            const playScreen = document.getElementById('play-screen');
+            playScreen.classList.add('hidden');
+            playScreen.classList.remove('flex');
+
             document.getElementById('winner-screen').classList.remove('hidden');
 
             let winnerName = "";
@@ -870,19 +871,19 @@
                 winnerEmoji = teamEmojis.team1;
                 winnerPoints = scores.team1;
                 loserPoints = scores.team2;
-                document.getElementById('winner-team-name').className = "text-3xl sm:text-4xl font-black text-blue-400";
+                document.getElementById('winner-team-name').className = "text-4xl sm:text-6xl font-black text-blue-400";
             } else if (scores.team2 > scores.team1) {
                 winnerName = `${teamNames.team2}`;
                 winnerEmoji = teamEmojis.team2;
                 winnerPoints = scores.team2;
                 loserPoints = scores.team1;
-                document.getElementById('winner-team-name').className = "text-3xl sm:text-4xl font-black text-red-400";
+                document.getElementById('winner-team-name').className = "text-4xl sm:text-6xl font-black text-red-400";
             } else {
                 winnerName = "تعادل مشرف لكلا الفريقين!";
                 winnerEmoji = "🤝";
                 winnerPoints = scores.team1;
                 loserPoints = scores.team2;
-                document.getElementById('winner-team-name').className = "text-3xl sm:text-4xl font-black text-amber-400";
+                document.getElementById('winner-team-name').className = "text-4xl sm:text-6xl font-black text-amber-400";
             }
 
             document.getElementById('winner-screen-crown').innerText = winnerEmoji;
@@ -901,7 +902,6 @@
         }
         
         window.addEventListener('load', () => {
-            // تشغيل آمن وتلقائي للأيقونات فور جاهزية الواجهة البرمجية بالكامل
             updateTeamIcons();
         });
     </script>
