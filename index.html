@@ -493,6 +493,23 @@
             }
         }
 
+        function shuffleQuestionOptions(questionObj) {
+            const shuffledOptions = [...questionObj.options];
+            const correctText = shuffledOptions[questionObj.correct];
+            
+            // Fisher-Yates Shuffle لخلط أماكن الاختيارات
+            for (let i = shuffledOptions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+            }
+
+            return {
+                ...questionObj,
+                options: shuffledOptions,
+                correct: shuffledOptions.indexOf(correctText)
+            };
+        }
+
         function startGame() {
             playChimeSound('click');
             startBgm();
@@ -519,12 +536,15 @@
             }
 
             const finalCount = parseInt(selectedCount, 10);
-            gameQuestions = sourcePool.slice(0, Math.min(finalCount, sourcePool.length));
+            const selectedRaw = sourcePool.slice(0, Math.min(finalCount, sourcePool.length));
+            
+            // خلط ترتيب الاختيارات لكل سؤال
+            gameQuestions = selectedRaw.map(q => shuffleQuestionOptions(q));
 
             scores.team1 = 0;
             scores.team2 = 0;
             currentQuestionIndex = 0;
-            turn = Math.random() > 0.5 ? 1 : 2; 
+            turn = 1; // يبدأ الفريق الأزرق دائماً في أول سؤال
             originalTurn = turn;
             stealActive = false;
 
@@ -640,6 +660,9 @@
 
             const activeTeamName = turn === 1 ? teamNames.team1 : teamNames.team2;
 
+            // إظهار السبب أو المرجع دائماً سواء الإجابة صحيحة أو خاطئة
+            refMsg.innerText = currentQuestion.ref ? `المرجع / السبب: ${currentQuestion.ref}` : "";
+
             if (selectedIndex === currentCorrectIndex) {
                 playChimeSound('up');
                 clickedBtn.className = "option-btn w-full bg-emerald-600 text-slate-950 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-xl sm:text-3xl lg:text-4xl border-b-8 border-emerald-800 min-h-[90px]";
@@ -650,8 +673,6 @@
 
                 panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-emerald-500/10 border-emerald-500/40 text-emerald-300 text-xl sm:text-2xl shadow-2xl space-y-2";
                 feedbackMsg.innerText = `✅ إجابة صحيحة وممتازة لـ ${activeTeamName}! (+${pointsGained} نقطة)`;
-                
-                refMsg.innerText = currentQuestion.ref ? `المرجع / الملاحظة: ${currentQuestion.ref}` : "";
                 
                 panel.classList.remove('hidden');
                 document.getElementById('next-btn').classList.remove('hidden');
@@ -666,8 +687,7 @@
                 }, 300);
 
                 panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-red-500/10 border-red-500/40 text-red-300 text-xl sm:text-2xl shadow-2xl space-y-2";
-                feedbackMsg.innerText = `❌ إجابة خاطئة من ${activeTeamName}!`;
-                refMsg.innerText = "";
+                feedbackMsg.innerText = `❌ إجابة خاطئة من ${activeTeamName}! الإجابة الصحيحة هي: (${currentQuestion.options[currentCorrectIndex]})`;
                 panel.classList.remove('hidden');
 
                 if (!stealActive) {
@@ -732,6 +752,8 @@
             playChimeSound('down');
             const panel = document.getElementById('feedback-panel');
             const feedbackMsg = document.getElementById('feedback-msg');
+            const refMsg = document.getElementById('ref-msg');
+            const currentQuestion = gameQuestions[currentQuestionIndex];
             
             const buttons = document.querySelectorAll('#options-grid button');
             buttons.forEach(b => b.disabled = true);
@@ -740,8 +762,9 @@
                 buttons[currentCorrectIndex].className = "option-btn w-full bg-emerald-600/90 text-slate-950 font-black p-6 sm:p-8 rounded-3xl shadow-2xl text-right transition duration-150 flex items-center justify-between text-xl sm:text-3xl lg:text-4xl min-h-[90px]";
             }
 
-            panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-amber-500/10 border-amber-500/40 text-amber-300 text-xl sm:text-2xl shadow-2xl";
-            feedbackMsg.innerText = `⏱️ انتهى وقت الإجابة لهذا السؤال!`;
+            panel.className = "p-6 rounded-3xl text-center font-black border-2 bg-amber-500/10 border-amber-500/40 text-amber-300 text-xl sm:text-2xl shadow-2xl space-y-2";
+            feedbackMsg.innerText = `⏱️ انتهى وقت الإجابة! الإجابة الصحيحة هي: (${currentQuestion.options[currentCorrectIndex]})`;
+            refMsg.innerText = currentQuestion.ref ? `المرجع / السبب: ${currentQuestion.ref}` : "";
             panel.classList.remove('hidden');
 
             document.getElementById('next-btn').classList.remove('hidden');
