@@ -128,63 +128,61 @@
         </div>
 
         <!-- شاشة اللعب النشطة - مجهزة بخطوط كبيرة جداً وملء العرض -->
-        <div id="play-screen" class="hidden flex-col justify-between space-y-6 my-auto py-2">
+        <div id="play-screen" class="hidden flex-col justify-between space-y-4 my-auto py-2">
             
             <!-- أوراق نقاط وأدوار الفرق -->
-            <div class="grid grid-cols-2 gap-4 sm:gap-8">
+            <div class="grid grid-cols-2 gap-3 sm:gap-6">
                 <!-- كرت الفريق الأول -->
-                <div id="t1-card" class="bg-slate-900/60 border-2 border-slate-800 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center">
+                <div id="t1-card" class="bg-slate-900/60 border-2 border-slate-800 p-3 sm:p-5 rounded-3xl text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center">
                     <div id="t1-turn-indicator" class="absolute top-2 right-2 bg-blue-500 text-xs sm:text-sm px-3 py-1 rounded-lg text-white font-black uppercase tracking-wider hidden">صاحب الدور</div>
-                    <span id="t1-icon-display" class="text-4xl sm:text-5xl block mb-1">🕊️</span>
-                    <h3 id="t1-display-name" class="text-lg sm:text-3xl font-black text-blue-400">فريق حمامة الذهب</h3>
-                    <div class="text-4xl sm:text-6xl font-black mt-1 text-slate-100" id="t1-score">0</div>
+                    <span id="t1-icon-display" class="text-3xl sm:text-5xl block mb-1">🕊️</span>
+                    <h3 id="t1-display-name" class="text-base sm:text-2xl font-black text-blue-400">فريق حمامة الذهب</h3>
+                    <div class="text-3xl sm:text-5xl font-black mt-1 text-slate-100" id="t1-score">0</div>
                 </div>
 
                 <!-- كرت الفريق الثاني -->
-                <div id="t2-card" class="bg-slate-900/60 border-2 border-slate-800 p-4 sm:p-6 rounded-3xl text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center">
+                <div id="t2-card" class="bg-slate-900/60 border-2 border-slate-800 p-3 sm:p-5 rounded-3xl text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center">
                     <div id="t2-turn-indicator" class="absolute top-2 right-2 bg-red-500 text-xs sm:text-sm px-3 py-1 rounded-lg text-white font-black uppercase tracking-wider hidden">صاحب الدور</div>
-                    <span id="t2-icon-display" class="text-4xl sm:text-5xl block mb-1">👑</span>
-                    <h3 id="t2-display-name" class="text-lg sm:text-3xl font-black text-red-400">فريق الملكة العذراء</h3>
-                    <div class="text-4xl sm:text-6xl font-black mt-1 text-slate-100" id="t2-score">0</div>
+                    <span id="t2-icon-display" class="text-3xl sm:text-5xl block mb-1">👑</span>
+                    <h3 id="t2-display-name" class="text-base sm:text-2xl font-black text-red-400">فريق الملكة العذراء</h3>
+                    <div class="text-3xl sm:text-5xl font-black mt-1 text-slate-100" id="t2-score">0</div>
                 </div>
             </div>
 
             <!-- إعلان الدور والمؤقت الكبيرة -->
-            <div class="flex items-center justify-between bg-slate-900/60 px-6 py-4 rounded-3xl border border-slate-800/80 gap-4">
-                <div id="turn-announcement" class="text-xl sm:text-3xl lg:text-4xl font-black text-amber-400 tracking-wide text-right"></div>
+            <div class="flex items-center justify-between bg-slate-900/60 px-5 py-3 rounded-2xl border border-slate-800/80 gap-4">
+                <div id="turn-announcement" class="text-lg sm:text-2xl lg:text-3xl font-black text-amber-400 tracking-wide text-right"></div>
                 
                 <!-- العداد الزمني العملاق -->
-                <div id="timer-ring-container" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-slate-900 border-4 border-emerald-500 flex items-center justify-center relative transition-all duration-300 text-emerald-400 timer-glow shrink-0">
-                    <span id="q-timer" class="text-3xl sm:text-5xl font-black">30</span>
+                <div id="timer-ring-container" class="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-slate-900 border-4 border-emerald-500 flex items-center justify-center relative transition-all duration-300 text-emerald-400 timer-glow shrink-0">
+                    <span id="q-timer" class="text-2xl sm:text-4xl font-black">30</span>
                 </div>
             </div>
 
-            <!-- منطقة السؤال العملاقة -->
-            <div class="bg-gradient-to-b from-slate-900/90 to-slate-950 p-6 sm:p-10 rounded-3xl border-2 border-amber-500/30 space-y-4 text-center shadow-2xl">
-                <div class="flex items-center justify-between text-amber-400 text-sm sm:text-xl font-black border-b border-slate-800/80 pb-3">
-                    <span id="question-source">القسم الأول 📜</span>
-                    <span id="progress-text" class="bg-amber-500/20 px-4 py-1 rounded-full text-amber-300">1/30</span>
-                </div>
-                <!-- خط كبير جداً لمطالعة السؤال بوضوح تام على الشاشات الكبيرة -->
-                <h2 id="question-text" class="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight sm:leading-snug text-slate-100 text-center py-2"></h2>
-            </div>
-
-            <!-- شبكة الاختيارات الكبيرة والمريحة للرؤية -->
-            <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            </div>
-
-            <!-- لوحة التقييم والمرجع -->
-            <div id="feedback-panel" class="hidden p-6 rounded-3xl text-center font-black border-2 text-xl sm:text-2xl space-y-2 shadow-2xl">
+            <!-- لوحة التقييم والمرجع وزر السؤال التالي (موضوعة فوق السؤال مباشرة لتجنب التمرير) -->
+            <div id="feedback-panel" class="hidden p-4 sm:p-6 rounded-3xl text-center font-black border-2 text-lg sm:text-2xl space-y-3 shadow-2xl bg-slate-900/95 border-amber-500/50">
                 <p id="feedback-msg"></p>
                 <p id="ref-msg" class="text-base sm:text-xl text-amber-400 font-bold"></p>
-            </div>
-
-            <!-- أزرار العمليات والتنقل (تم تعديل الزر ليكون السؤال التالي فقط بدون سرقة) -->
-            <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xl sm:text-3xl py-5 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
+                <!-- زر السؤال التالي يظهر هنا أعلى السؤال -->
+                <button id="next-btn" onclick="nextQuestion()" class="hidden w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xl sm:text-3xl py-4 rounded-2xl transition duration-150 transform active:scale-95 shadow-2xl">
                     السؤال التالي ➡️
                 </button>
             </div>
+
+            <!-- منطقة السؤال -->
+            <div class="bg-gradient-to-b from-slate-900/90 to-slate-950 p-5 sm:p-8 rounded-3xl border-2 border-amber-500/30 space-y-3 text-center shadow-2xl">
+                <div class="flex items-center justify-between text-amber-400 text-sm sm:text-lg font-black border-b border-slate-800/80 pb-2">
+                    <span id="question-source">القسم الأول 📜</span>
+                    <span id="progress-text" class="bg-amber-500/20 px-3 py-1 rounded-full text-amber-300">1/30</span>
+                </div>
+                <!-- خط واسع وواضح لمطالعة السؤال -->
+                <h2 id="question-text" class="text-xl sm:text-3xl lg:text-4xl font-black leading-tight text-slate-100 text-center py-1"></h2>
+            </div>
+
+            <!-- شبكة الاختيارات الكبيرة والمريحة للرؤية -->
+            <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-5">
+            </div>
+
         </div>
 
         <!-- شاشة إعلان البطل والفائز (Winner Screen) -->
